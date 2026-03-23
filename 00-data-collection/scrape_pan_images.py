@@ -26,6 +26,9 @@ import colorlog
 import requests
 from tqdm import tqdm
 
+# Constants
+DEFAULT_TIMEOUT = 10
+
 
 def setup_logging() -> logging.Logger:
     """Configure colorlog for terminal output with colors."""
@@ -89,7 +92,7 @@ def is_valid_image_format(data: bytes) -> bool:
     return False
 
 
-def get_image_urls_from_bing(query: str, limit: int, logger: logging.Logger) -> list:
+def get_image_urls_from_bing(query: str, limit: int, logger: logging.Logger) -> list[str]:
     """
     Fetch image URLs from Bing Image Search.
 
@@ -118,7 +121,7 @@ def get_image_urls_from_bing(query: str, limit: int, logger: logging.Logger) -> 
         params = {"q": query}
 
         logger.info(f"Fetching URLs for query: {query}")
-        response = requests.get(url, params=params, headers=headers, timeout=15)
+        response = requests.get(url, params=params, headers=headers, timeout=DEFAULT_TIMEOUT)
         response.raise_for_status()
 
         logger.debug("Extracting image URLs from HTML response...")
@@ -187,7 +190,7 @@ def get_image_urls_from_bing(query: str, limit: int, logger: logging.Logger) -> 
         return []
 
 
-def download_image(url: str, output_path: Path, timeout: int = 10, retries: int = 3, logger: logging.Logger = None) -> bool:
+def download_image(url: str, output_path: Path, timeout: int = DEFAULT_TIMEOUT, retries: int = 3, logger: logging.Logger | None = None) -> bool:
     """
     Download a single image with retry logic.
 
@@ -204,10 +207,12 @@ def download_image(url: str, output_path: Path, timeout: int = 10, retries: int 
     Returns:
         True if successfully downloaded and saved, False otherwise
     """
+    if logger is None:
+        logger = logging.getLogger(__name__)
+
     # Skip invalid URLs
     if not url or not url.startswith("http"):
-        if logger:
-            logger.debug(f"Invalid URL: {str(url)[:60]}...")
+        logger.debug(f"Invalid URL: {str(url)[:60]}...")
         return False
 
     for attempt in range(retries):
@@ -219,8 +224,7 @@ def download_image(url: str, output_path: Path, timeout: int = 10, retries: int 
 
             # Validate image format before saving
             if not is_valid_image_format(data):
-                if logger:
-                    logger.debug(f"Invalid format: {str(url)[:60]}...")
+                logger.debug(f"Invalid format: {str(url)[:60]}...")
                 return False
 
             # Write image to disk
@@ -228,15 +232,13 @@ def download_image(url: str, output_path: Path, timeout: int = 10, retries: int 
             with open(output_path, "wb") as f:
                 f.write(data)
 
-            if logger:
-                logger.debug(f"Downloaded: {output_path.name}")
+            logger.debug(f"Downloaded: {output_path.name}")
             return True
 
         except requests.exceptions.RequestException as e:
             if attempt < retries - 1:
                 wait_time = 2 ** attempt
-                if logger:
-                    logger.debug(f"Attempt {attempt + 1} failed, retrying in {wait_time}s...")
+                logger.debug(f"Attempt {attempt + 1} failed, retrying in {wait_time}s...")
                 time.sleep(wait_time)
 
     return False
@@ -311,7 +313,7 @@ def scrape_query(query: str, output_dir: Path, limit: int, logger: logging.Logge
     type=click.Path(),
     help="Output directory for downloaded images"
 )
-def scrape(queries: str, limit: int, output: str):
+def scrape(queries: str, limit: int, output: str) -> None:
     """
     Download pan images from Bing Image Search.
 
