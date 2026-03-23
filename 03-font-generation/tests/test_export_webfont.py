@@ -4,16 +4,15 @@ Uses TDD approach: tests were written before implementation.
 External compress() function is mocked to isolate unit under test.
 """
 
+import logging
 import sys
-import os
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 import pytest
 
 # Ensure the parent directory is on sys.path so we can import export_webfont
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import export_webfont
 from export_webfont import get_file_size_kb, export_woff2
 
 
@@ -34,6 +33,14 @@ def tmp_ttf(tmp_path):
 def tmp_woff2_path(tmp_path):
     """Return a path for a WOFF2 output that doesn't exist yet."""
     return tmp_path / "output" / "TestFont.woff2"
+
+
+@pytest.fixture
+def fake_compress_side_effect():
+    def _compress(_in_path, out_path):
+        Path(out_path).parent.mkdir(parents=True, exist_ok=True)
+        Path(out_path).write_bytes(b"Y" * 5120)
+    return _compress
 
 
 # ---------------------------------------------------------------------------
@@ -65,14 +72,10 @@ class TestGetFileSizeKb:
 # ---------------------------------------------------------------------------
 
 class TestExportWoff2:
-    def test_calls_compress_with_string_paths(self, tmp_ttf, tmp_woff2_path):
+    def test_calls_compress_with_string_paths(self, tmp_ttf, tmp_woff2_path, fake_compress_side_effect):
         """compress() must receive str arguments, not Path objects."""
         with patch("export_webfont.compress") as mock_compress:
-            # Simulate compress writing a small output file
-            def fake_compress(in_path, out_path):
-                Path(out_path).parent.mkdir(parents=True, exist_ok=True)
-                Path(out_path).write_bytes(b"Y" * 5120)
-            mock_compress.side_effect = fake_compress
+            mock_compress.side_effect = fake_compress_side_effect
 
             export_woff2(tmp_ttf, tmp_woff2_path)
 
@@ -80,41 +83,30 @@ class TestExportWoff2:
                 str(tmp_ttf), str(tmp_woff2_path)
             )
 
-    def test_creates_output_directory(self, tmp_ttf, tmp_woff2_path):
+    def test_creates_output_directory(self, tmp_ttf, tmp_woff2_path, fake_compress_side_effect):
         """Output directory must be created if it doesn't exist."""
         assert not tmp_woff2_path.parent.exists()
 
         with patch("export_webfont.compress") as mock_compress:
-            def fake_compress(in_path, out_path):
-                Path(out_path).parent.mkdir(parents=True, exist_ok=True)
-                Path(out_path).write_bytes(b"Y" * 5120)
-            mock_compress.side_effect = fake_compress
+            mock_compress.side_effect = fake_compress_side_effect
 
             export_woff2(tmp_ttf, tmp_woff2_path)
 
         assert tmp_woff2_path.parent.exists()
 
-    def test_output_file_created(self, tmp_ttf, tmp_woff2_path):
+    def test_output_file_created(self, tmp_ttf, tmp_woff2_path, fake_compress_side_effect):
         """WOFF2 output file must exist after successful conversion."""
         with patch("export_webfont.compress") as mock_compress:
-            def fake_compress(in_path, out_path):
-                Path(out_path).parent.mkdir(parents=True, exist_ok=True)
-                Path(out_path).write_bytes(b"Y" * 5120)
-            mock_compress.side_effect = fake_compress
+            mock_compress.side_effect = fake_compress_side_effect
 
             export_woff2(tmp_ttf, tmp_woff2_path)
 
         assert tmp_woff2_path.exists()
 
-    def test_logs_compression_stats(self, tmp_ttf, tmp_woff2_path, caplog):
+    def test_logs_compression_stats(self, tmp_ttf, tmp_woff2_path, caplog, fake_compress_side_effect):
         """Compression ratio must appear in log output."""
-        import logging
-
         with patch("export_webfont.compress") as mock_compress:
-            def fake_compress(in_path, out_path):
-                Path(out_path).parent.mkdir(parents=True, exist_ok=True)
-                Path(out_path).write_bytes(b"Y" * 5120)
-            mock_compress.side_effect = fake_compress
+            mock_compress.side_effect = fake_compress_side_effect
 
             with caplog.at_level(logging.INFO, logger="export_webfont"):
                 export_woff2(tmp_ttf, tmp_woff2_path)
@@ -123,14 +115,9 @@ class TestExportWoff2:
         messages = " ".join(caplog.messages)
         assert "Compression" in messages or "reduction" in messages
 
-    def test_logs_input_path(self, tmp_ttf, tmp_woff2_path, caplog):
-        import logging
-
+    def test_logs_input_path(self, tmp_ttf, tmp_woff2_path, caplog, fake_compress_side_effect):
         with patch("export_webfont.compress") as mock_compress:
-            def fake_compress(in_path, out_path):
-                Path(out_path).parent.mkdir(parents=True, exist_ok=True)
-                Path(out_path).write_bytes(b"Y" * 5120)
-            mock_compress.side_effect = fake_compress
+            mock_compress.side_effect = fake_compress_side_effect
 
             with caplog.at_level(logging.INFO, logger="export_webfont"):
                 export_woff2(tmp_ttf, tmp_woff2_path)
@@ -138,14 +125,9 @@ class TestExportWoff2:
         messages = " ".join(caplog.messages)
         assert tmp_ttf.name in messages
 
-    def test_logs_output_path(self, tmp_ttf, tmp_woff2_path, caplog):
-        import logging
-
+    def test_logs_output_path(self, tmp_ttf, tmp_woff2_path, caplog, fake_compress_side_effect):
         with patch("export_webfont.compress") as mock_compress:
-            def fake_compress(in_path, out_path):
-                Path(out_path).parent.mkdir(parents=True, exist_ok=True)
-                Path(out_path).write_bytes(b"Y" * 5120)
-            mock_compress.side_effect = fake_compress
+            mock_compress.side_effect = fake_compress_side_effect
 
             with caplog.at_level(logging.INFO, logger="export_webfont"):
                 export_woff2(tmp_ttf, tmp_woff2_path)
@@ -177,8 +159,6 @@ class TestExportWoff2ErrorHandling:
         assert exc_info.value.code == 1
 
     def test_compress_failure_logs_error(self, tmp_ttf, tmp_woff2_path, caplog):
-        import logging
-
         with patch("export_webfont.compress", side_effect=Exception("Brotli error")):
             with caplog.at_level(logging.ERROR, logger="export_webfont"):
                 with pytest.raises(SystemExit):
@@ -220,16 +200,13 @@ class TestCLI:
         result = runner.invoke(main, ["--input", str(missing), "--output", str(out)])
         assert result.exit_code != 0
 
-    def test_cli_successful_conversion(self, tmp_ttf, tmp_woff2_path):
+    def test_cli_successful_conversion(self, tmp_ttf, tmp_woff2_path, fake_compress_side_effect):
         """CLI exits 0 on successful conversion."""
         from click.testing import CliRunner
         from export_webfont import main
 
         with patch("export_webfont.compress") as mock_compress:
-            def fake_compress(in_path, out_path):
-                Path(out_path).parent.mkdir(parents=True, exist_ok=True)
-                Path(out_path).write_bytes(b"Y" * 5120)
-            mock_compress.side_effect = fake_compress
+            mock_compress.side_effect = fake_compress_side_effect
 
             runner = CliRunner()
             result = runner.invoke(
