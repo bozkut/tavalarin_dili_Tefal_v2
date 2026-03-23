@@ -1,0 +1,42 @@
+# Virtual environment
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build artifacts
+*.egg
+dist/
+build/
+
+# Data directories
+00-data-collection/images/
+00-data-collection/test_download/
+01-image-processing/input/
+01-image-processing/output/
+02-curation-tool/node_modules/
+02-curation-tool/dist/
+02-curation-tool/build/
+03-font-generation/input/
+03-font-generation/output/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Cache
+.ruff_cache/
+.pytest_cache/
+.claude/

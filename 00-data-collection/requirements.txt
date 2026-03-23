@@ -1,0 +1,6 @@
+click
+colorlog
+tqdm
+requests
+selenium
+webdriver-manager
