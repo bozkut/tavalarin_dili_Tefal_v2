@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tavaların Dili — Tava Çiziklerinden Doğan Font</title>
+<style>
+  @font-face {
+    font-family: 'Tava Beige';
+    src: url('fonts/TavaBeige-Regular.woff2') format('woff2'),
+         url('fonts/TavaBeige-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #111;
+    color: #e0ddd0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 60px 20px 40px;
+    background: linear-gradient(180deg, #1a1a1a 0%, #111 100%);
+  }
+
+  .hero h1 {
+    font-family: 'Tava Beige', serif;
+    font-size: clamp(48px, 10vw, 96px);
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+    color: #f0ebe0;
+  }
+
+  .hero p {
+    font-size: 18px;
+    color: #888;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .divider {
+    width: 60px;
+    height: 2px;
+    background: #e2001a;
+    margin: 30px auto;
+  }
+
+  .section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  .section-title {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+  .specimen {
+    font-family: 'Tava Beige', serif;
+    font-size: clamp(28px, 5vw, 48px);
+    line-height: 1.6;
+    color: #e8e4d8;
+    margin-bottom: 12px;
+    word-break: break-all;
+  }
+
+  .specimen.small {
+    font-size: clamp(20px, 3.5vw, 32px);
+  }
+
+  .specimen.large {
+    font-size: clamp(36px, 8vw, 72px);
+    text-align: center;
+    padding: 30px 0;
+  }
+
+  .sample-block {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+
+  .type-tester {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+
+  .type-tester textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #333;
+    color: #e8e4d8;
+    font-family: 'Tava Beige', serif;
+    font-size: clamp(28px, 5vw, 48px);
+    padding: 16px 0;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+  }
+
+  .type-tester textarea::placeholder {
+    color: #444;
+  }
+
+  .size-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 16px;
+  }
+
+  .size-controls label {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .size-controls input[type="range"] {
+    flex: 1;
+    accent-color: #e2001a;
+  }
+
+  .size-controls span {
+    font-size: 13px;
+    color: #888;
+    min-width: 40px;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .info-card {
+    background: #1a1a1a;
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .info-card .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+
+  .info-card .value {
+    font-size: 18px;
+    color: #ccc;
+  }
+
+  .download-section {
+    text-align: center;
+    padding: 50px 20px;
+  }
+
+  .download-btn {
+    display: inline-block;
+    background: #e2001a;
+    color: white;
+    text-decoration: none;
+    padding: 14px 36px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: background 0.2s;
+    margin: 8px;
+  }
+
+  .download-btn:hover {
+    background: #c5001a;
+  }
+
+  .download-btn.secondary {
+    background: transparent;
+    border: 1px solid #444;
+    color: #aaa;
+  }
+
+  .download-btn.secondary:hover {
+    border-color: #888;
+    color: #ddd;
+  }
+
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: #444;
+    font-size: 13px;
+    border-top: 1px solid #222;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Tavaların Dili</h1>
+  <div class="divider"></div>
+  <p>Tefal tavaların yüzeyindeki çiziklerden esinlenerek tasarlanmış bir Türkçe font. Her harf, mutfağın izlerini typografiye taşır.</p>
+</div>
+
+<div class="section">
+  <div class="section-title">Yazı Dene</div>
+  <div class="type-tester">
+    <textarea id="tester" placeholder="Buraya yaz...">Tavaların Dili</textarea>
+    <div class="size-controls">
+      <label>Boyut</label>
+      <input type="range" id="sizeSlider" min="16" max="120" value="48">
+      <span id="sizeLabel">48px</span>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Büyük Harfler</div>
+  <div class="sample-block">
+    <div class="specimen">ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ</div>
+  </div>
+
+  <div class="section-title">Küçük Harfler</div>
+  <div class="sample-block">
+    <div class="specimen">abcçdefgğhıijklmnoöprsştuüvyz</div>
+  </div>
+
+  <div class="section-title">Rakamlar ve Noktalama</div>
+  <div class="sample-block">
+    <div class="specimen">0123456789</div>
+    <div class="specimen small">.,;:!?'"-</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Örnek Metin</div>
+  <div class="sample-block">
+    <div class="specimen large">Çizikler Konuşur</div>
+    <div class="specimen small">Her tava bir hikaye anlatır. Şefin eli değdikçe yüzeyde yeni harfler doğar. Bu font, mutfağın sessiz dilini görünür kılar.</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Font Bilgileri</div>
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="label">Glif Sayısı</div>
+      <div class="value">77</div>
+    </div>
+    <div class="info-card">
+      <div class="label">Karakter Seti</div>
+      <div class="value">Türkçe (tam)</div>
+    </div>
+    <div class="info-card">
+      <div class="label">Formatlar</div>
+      <div class="value">TTF, WOFF2</div>
+    </div>
+    <div class="info-card">
+      <div class="label">Stil</div>
+      <div class="value">Regular</div>
+    </div>
+    <div class="info-card">
+      <div class="label">UPM</div>
+      <div class="value">1000</div>
+    </div>
+    <div class="info-card">
+      <div class="label">Lisans</div>
+      <div class="value">Proje kapsamında</div>
+    </div>
+  </div>
+</div>
+
+<div class="download-section">
+  <div class="section-title">Font İndir</div>
+  <div style="margin-top: 20px;">
+    <a href="fonts/TavaBeige-Regular.ttf" download class="download-btn">TTF İndir</a>
+    <a href="fonts/TavaBeige-Regular.woff2" download class="download-btn secondary">WOFF2 İndir</a>
+  </div>
+</div>
+
+<footer>
+  Tavaların Dili — Tefal tava çiziklerinden esinlenerek üretilmiştir.
+</footer>
+
+<script>
+  const textarea = document.getElementById('tester');
+  const slider = document.getElementById('sizeSlider');
+  const label = document.getElementById('sizeLabel');
+
+  slider.addEventListener('input', () => {
+    const size = slider.value;
+    textarea.style.fontSize = size + 'px';
+    label.textContent = size + 'px';
+  });
+</script>
+
+</body>
+</html>
