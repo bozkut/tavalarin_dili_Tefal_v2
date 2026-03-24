@@ -6,7 +6,7 @@ import json
 from base64 import b64encode
 import anthropic
 
-os.environ["ANTHROPIC_API_KEY"] = "REDACTED"
+os.environ.setdefault("ANTHROPIC_API_KEY", "")  # Set via environment variable
 
 # İlk panı test et
 test_image = r"E:\Tefal\Görseller\Tavalar\484809144_651713074128278_7864583726765487524_n.jpg"

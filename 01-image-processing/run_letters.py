@@ -6,7 +6,7 @@ import sys
 import subprocess
 
 # API anahtarını ayarla
-os.environ["ANTHROPIC_API_KEY"] = "REDACTED"
+os.environ.setdefault("ANTHROPIC_API_KEY", "")  # Set via environment variable
 
 # find_letters_ai.py'yi çalıştır
 from find_letters_ai import find_letters
