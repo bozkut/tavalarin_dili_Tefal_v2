@@ -116,22 +116,22 @@ def collect_detections(
                 logger.warning(f"No letters detected in {json_file.name}")
                 continue
 
-            # Find the best matching detection
+            # Find the best matching detection (case-insensitive)
             best_match = None
             for letter_data in letters:
                 detected_char = letter_data.get("letter", "?")
                 confidence = letter_data.get("confidence", "low")
                 confidence_value = confidence_levels.get(confidence, 0)
 
-                # Check if this matches the target character
-                if detected_char == target_char and confidence_value >= min_confidence:
+                # Case-insensitive match: pan_A detecting "a" should count
+                if detected_char.lower() == target_char.lower() and confidence_value >= min_confidence:
                     if best_match is None or confidence_value > confidence_levels.get(
                         best_match.get("confidence", "low"), 0
                     ):
                         best_match = letter_data
 
             if best_match:
-                char = best_match.get("letter", target_char)
+                char = target_char  # Use target char (from filename), not detected case
                 glyph_library[char] = {
                     "letter": char,
                     "unicode": char_to_unicode(char),

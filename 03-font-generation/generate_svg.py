@@ -31,19 +31,18 @@ def normalize_to_upm(norm_point, upm=1000):
     """Convert normalized 0-1 coordinates to UPM units.
 
     Input: normalized 0-1 (0,0=top-left, 1,1=bottom-right)
-    Output: UPM 1000 (0,700=top, 1000,0=bottom, centered at x=500)
+    Output: UPM 1000 coordinates with proper glyph proportions.
 
-    Formula:
-    - upm_x = norm_x * 200 + 400 (maps 0-1 to 400-600, centered at 500)
-    - upm_y = (1.0 - norm_y) * 900 + (-200) (inverts Y, scales to ascent/descent)
+    Mapping:
+    - X: 0-1 maps to 50-950 (900-unit range, centered in advance width)
+    - Y: 0-1 maps to 700 down to -200 (inverted, full ascent-to-descent)
     """
     norm_x, norm_y = norm_point
 
-    # Map x from 0-1 to 400-600 (centered at 500 in a 1000-unit glyph width)
-    upm_x = norm_x * 200 + 400
+    # Map x from 0-1 to 50-950 (centered in 1000-unit advance width)
+    upm_x = norm_x * 900 + 50
 
-    # Invert Y (flip vertically) and map from 0-1 to -200 to 700 (ascent to descent)
-    # -200 is descent, 700 is cap_height
+    # Invert Y and map from 0-1 to 700 (ascent) down to -200 (descent)
     upm_y = (1.0 - norm_y) * 900 + (-200)
 
     return [upm_x, upm_y]

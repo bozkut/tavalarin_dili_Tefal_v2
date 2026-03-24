@@ -53,8 +53,8 @@ def svg_path_to_contours(path_data: str) -> list[list[tuple[int, int]]]:
     current_contour = []
 
     # Parse path data using regex
-    # Match both M/L commands with floating-point or integer coordinates
-    pattern = r'([ML])\s+([\d.]+)\s+([\d.]+)'
+    # Match M/L commands with floating-point coordinates (including negative)
+    pattern = r'([ML])\s+(-?[\d.]+)\s+(-?[\d.]+)'
     matches = re.findall(pattern, path_data)
 
     if not matches:
@@ -166,6 +166,30 @@ def create_glyph_set(glyphs_dir: Path) -> dict[str, list[list[tuple[int, int]]]]
     return glyph_set
 
 
+def char_to_glyph_name(char: str) -> str:
+    """Convert a character to a valid PostScript glyph name.
+
+    Uses standard Adobe Glyph List names for non-ASCII characters.
+    """
+    GLYPH_NAME_MAP = {
+        "Ç": "Ccedilla", "ç": "ccedilla",
+        "Ğ": "Gbreve", "ğ": "gbreve",
+        "İ": "Idotaccent", "ı": "dotlessi",
+        "Ö": "Odieresis", "ö": "odieresis",
+        "Ş": "Scedilla", "ş": "scedilla",
+        "Ü": "Udieresis", "ü": "udieresis",
+        ".": "period", ",": "comma", ";": "semicolon", ":": "colon",
+        "!": "exclam", "?": "question", "'": "quotesingle",
+        '"': "quotedbl", "-": "hyphen",
+    }
+    if char in GLYPH_NAME_MAP:
+        return GLYPH_NAME_MAP[char]
+    if char.isascii() and char.isalnum():
+        return char
+    # Fallback: uni+hex
+    return f"uni{ord(char):04X}"
+
+
 def build_font(glyph_set: dict[str, list[list[tuple[int, int]]]]) -> TTFont:
     """Build TTF font from glyph set using fontTools.
 
@@ -177,8 +201,11 @@ def build_font(glyph_set: dict[str, list[list[tuple[int, int]]]]) -> TTFont:
     Returns:
         fontTools TTFont object
     """
+    # Map characters to valid PostScript glyph names
+    char_to_name = {char: char_to_glyph_name(char) for char in glyph_set}
+
     # Prepare glyph order (always start with .notdef)
-    glyph_order = [".notdef"] + sorted(glyph_set.keys())
+    glyph_order = [".notdef"] + [char_to_name[c] for c in sorted(glyph_set.keys())]
 
     # Create fontBuilder
     fb = FontBuilder(unitsPerEm=1000, isTTF=True)
@@ -210,14 +237,14 @@ def build_font(glyph_set: dict[str, list[list[tuple[int, int]]]]) -> TTFont:
             # Close contour
             pen.closePath()
 
-        glyphs_dict[char] = pen.glyph()
+        glyphs_dict[char_to_name[char]] = pen.glyph()
 
     # Setup glyphs with outlines
     fb.setupGlyf(glyphs_dict)
 
     # Setup character map (cmap)
     # Map Unicode values to glyph names
-    cmap_dict = {ord(char): char for char in glyph_set.keys()}
+    cmap_dict = {ord(char): char_to_name[char] for char in glyph_set.keys()}
     fb.setupCharacterMap(cmap_dict)
 
     # Setup horizontal metrics

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Tava Beige Font Test</title>
+<style>
+  @font-face {
+    font-family: 'Tava Beige';
+    src: url('output/woff/TavaBeige-Regular.woff2') format('woff2'),
+         url('output/ttf/TavaBeige-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  body {
+    background: #1a1a1a;
+    color: #e0ddd0;
+    font-family: 'Tava Beige', sans-serif;
+    padding: 40px;
+  }
+  h1 { font-size: 72px; margin: 20px 0; }
+  h2 { font-size: 48px; margin: 20px 0; }
+  p  { font-size: 36px; margin: 15px 0; line-height: 1.6; }
+  .small { font-size: 24px; }
+  .label {
+    font-family: sans-serif;
+    font-size: 14px;
+    color: #888;
+    margin-top: 40px;
+    border-top: 1px solid #333;
+    padding-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="label">72px — Başlık</div>
+<h1>Tavaların Dili</h1>
+
+<div class="label">48px — Alt Başlık</div>
+<h2>Tava Çiziklerinden Doğan Font</h2>
+
+<div class="label">36px — Büyük Harfler</div>
+<p>ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ</p>
+
+<div class="label">36px — Küçük Harfler</div>
+<p>abcçdefgğhıijklmnoöprsştuüvyz</p>
+
+<div class="label">36px — Rakamlar</div>
+<p>0123456789</p>
+
+<div class="label">36px — Noktalama</div>
+<p>.,;:!?'"-</p>
+
+<div class="label">36px — Örnek Metin</div>
+<p>Her tava bir hikaye anlatır; çizikler harflere dönüşür.</p>
+
+<div class="label">24px — Küçük Örnek</div>
+<p class="small">Tefal tavaların yüzeyindeki çiziklerden esinlenerek tasarlanmış bu font, mutfağın izlerini typografiye taşır. Şefin eli değdikçe tavada yeni harfler doğar.</p>
+
+</body>
+</html>
