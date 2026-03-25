@@ -781,7 +781,7 @@
     color: var(--mid-gray);
   }
 
-  /* ======== PROCESS ======== */
+  /* ======== PROCESS (Proof Panels) ======== */
   .process {
     padding: 100px 0;
     background: var(--white);
@@ -804,45 +804,353 @@
     margin-bottom: 56px;
   }
 
-  .process-grid {
+  /* Proof panel — each step */
+  .proof-panel {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-  }
-
-  .process-card {
-    padding: 32px 24px;
+    grid-template-columns: 340px 1fr;
+    gap: 32px;
+    margin-bottom: 48px;
+    padding: 36px;
     background: var(--off-white);
-    border-radius: 12px;
+    border-radius: 16px;
     border: 1px solid var(--border);
-    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: border-color 0.3s;
   }
 
-  .process-card:hover {
-    border-color: var(--tefal-red);
-    box-shadow: 0 4px 20px var(--tefal-red-glow);
-    transform: translateY(-4px);
+  .proof-panel:hover {
+    border-color: rgba(228,50,43,0.25);
   }
 
-  .process-num {
+  .proof-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .proof-num {
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 700;
     color: var(--tefal-red);
-    margin-bottom: 20px;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
   }
 
-  .process-card h3 {
-    font-size: 17px;
-    font-weight: 600;
+  .proof-info h3 {
+    font-size: 20px;
+    font-weight: 700;
     color: var(--text-primary);
     margin-bottom: 12px;
   }
 
-  .process-card p {
+  .proof-info p {
     font-size: 14px;
     line-height: 1.7;
     color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+
+  .proof-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--mid-gray);
+    padding: 6px 10px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: fit-content;
+    margin-top: auto;
+  }
+
+  .proof-badge::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--tefal-red);
+    flex-shrink: 0;
+  }
+
+  /* Proof evidence area */
+  .proof-evidence {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Photo grid */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .photo-grid img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: transform 0.3s;
+  }
+
+  .photo-grid img:hover {
+    transform: scale(1.05);
+    z-index: 2;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  }
+
+  /* Data bars (horizontal) */
+  .data-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .data-bar-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 60px;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .data-bar-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--mid-gray);
+    letter-spacing: 0.3px;
+    text-align: right;
+  }
+
+  .data-bar-track {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .data-bar-fill {
+    height: 100%;
+    background: var(--tefal-red);
+    border-radius: 3px;
+    transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .data-bar-val {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  /* Frequency bars (vertical) */
+  .freq-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    height: 80px;
+    padding: 12px 16px;
+    background: var(--white);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .freq-bar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  .freq-bar-fill {
+    width: 100%;
+    max-width: 32px;
+    background: linear-gradient(to top, var(--tefal-red), rgba(228,50,43,0.5));
+    border-radius: 3px 3px 0 0;
+    transition: height 1s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .freq-bar-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--mid-gray);
+    white-space: nowrap;
+  }
+
+  /* SVG compare */
+  .svg-compare {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .svg-box {
+    background: var(--pan);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    aspect-ratio: 1;
+  }
+
+  .svg-box-label {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--mid-gray);
+    padding: 2px 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+  }
+
+  .svg-arrow {
+    font-size: 20px;
+    color: var(--tefal-red);
+    font-weight: 700;
+  }
+
+  /* Proof table */
+  .proof-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .proof-table th,
+  .proof-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .proof-table th {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--mid-gray);
+    background: var(--white);
+  }
+
+  .proof-table td {
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+  }
+
+  .proof-table td:last-child {
+    font-weight: 700;
+    color: var(--tefal-red);
+  }
+
+  /* Pipeline flow */
+  .pipeline-flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 16px;
+    background: var(--white);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .pipeline-node {
+    flex: 1;
+    text-align: center;
+    padding: 12px 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--off-white);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .pipeline-node.active {
+    background: var(--tefal-red-light);
+    border-color: var(--tefal-red);
+    color: var(--tefal-red);
+  }
+
+  .pipeline-arrow {
+    font-size: 14px;
+    color: var(--tefal-red);
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* Font specimen in proof */
+  .proof-specimen {
+    background: var(--pan);
+    border-radius: 12px;
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .proof-specimen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(200,191,176,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .proof-specimen-text {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 56px);
+    color: var(--scratch-bright);
+    letter-spacing: 6px;
+    line-height: 1.4;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Metrics mini grid */
+  .proof-metrics {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .proof-metric {
+    background: var(--white);
+    padding: 14px 8px;
+    text-align: center;
+  }
+
+  .proof-metric-val {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .proof-metric-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--mid-gray);
+    margin-top: 2px;
   }
 
   /* ======== DOWNLOAD ======== */
@@ -1007,10 +1315,14 @@
     .glyph-grid { grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); }
     .glyph-char { font-size: 22px; }
 
-    .process-grid {
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+    .proof-panel {
+      grid-template-columns: 1fr;
+      gap: 24px;
     }
+
+    .photo-grid { grid-template-columns: repeat(3, 1fr); }
+
+    .proof-metrics { grid-template-columns: repeat(3, 1fr); }
 
     .footer-top { flex-direction: column; gap: 24px; }
     .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
@@ -1019,7 +1331,12 @@
   @media (max-width: 560px) {
     .header-nav { display: none; }
     .hero-title { letter-spacing: 1px; }
-    .process-grid { grid-template-columns: 1fr; }
+    .photo-grid { grid-template-columns: repeat(2, 1fr); }
+    .svg-compare { grid-template-columns: 1fr; gap: 8px; }
+    .svg-arrow { transform: rotate(90deg); text-align: center; }
+    .proof-metrics { grid-template-columns: repeat(3, 1fr); }
+    .pipeline-flow { flex-wrap: wrap; justify-content: center; }
+    .data-bar-row { grid-template-columns: 80px 1fr 50px; }
     .specimen-chars { letter-spacing: 4px; }
     .marquee-text { letter-spacing: 8px; }
     .footer-links { flex-wrap: wrap; gap: 16px; }
@@ -1199,33 +1516,190 @@
   </div>
 </section>
 
-<!-- ======== PROCESS ======== -->
+<!-- ======== PROCESS (Proof Panels) ======== -->
 <section class="process" id="process">
   <div class="container">
-    <div class="process-eyebrow reveal">Nasıl Yapıldı</div>
+    <div class="process-eyebrow reveal">Araştırma Süreci</div>
     <h2 class="reveal">Tavadan Fonte: 4 Adım</h2>
-    <div class="process-grid stagger">
-      <div class="process-card reveal">
-        <div class="process-num">01</div>
+
+    <!-- ── STEP 01: Çizik Analizi ── -->
+    <div class="proof-panel reveal">
+      <div class="proof-info">
+        <div class="proof-num">ADIM 01</div>
         <h3>Çizik Analizi</h3>
-        <p>40 gerçek tava fotoğrafı OpenCV ile analiz edildi. Çizik açıları, frekansları ve yoğunlukları çıkarıldı.</p>
+        <p>40 gerçek tava fotoğrafı OpenCV ile analiz edildi. Canny kenar tespiti, Hough çizgi dönüşümü ve FFT frekans analizi uygulandı.</p>
+        <div class="data-bars">
+          <div class="data-bar-row">
+            <span class="data-bar-label">Pürüz</span>
+            <div class="data-bar-track"><div class="data-bar-fill" style="width:60%"></div></div>
+            <span class="data-bar-val">1.8</span>
+          </div>
+          <div class="data-bar-row">
+            <span class="data-bar-label">Genlik</span>
+            <div class="data-bar-track"><div class="data-bar-fill" style="width:40%"></div></div>
+            <span class="data-bar-val">0.008</span>
+          </div>
+          <div class="data-bar-row">
+            <span class="data-bar-label">Açı Yayılımı</span>
+            <div class="data-bar-track"><div class="data-bar-fill" style="width:72%"></div></div>
+            <span class="data-bar-val">52.3°</span>
+          </div>
+          <div class="data-bar-row">
+            <span class="data-bar-label">Baskın Açı</span>
+            <div class="data-bar-track"><div class="data-bar-fill" style="width:95%"></div></div>
+            <span class="data-bar-val">171°</span>
+          </div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="proof-badge">40 fotoğraf &rarr; OpenCV Canny + Hough + FFT &rarr; 30.484 çizgi</div>
+        </div>
       </div>
-      <div class="process-card reveal">
-        <div class="process-num">02</div>
-        <h3>İskelet Çıkarma</h3>
-        <p>Harfler Zhang-Suen iskeletleştirme ile kılcal çiziğe benzer ince hatlara dönüştürüldü.</p>
-      </div>
-      <div class="process-card reveal">
-        <div class="process-num">03</div>
-        <h3>Organik Distorsiyon</h3>
-        <p>Gerçek çizik profilinden gelen frekans ve genlik verileriyle doğal bozulma uygulandı.</p>
-      </div>
-      <div class="process-card reveal">
-        <div class="process-num">04</div>
-        <h3>Font Üretimi</h3>
-        <p>SVG glif verileri fontTools ile TTF ve Brotli sıkıştırmalı WOFF2 formatlarına dönüştürüldü.</p>
+      <div class="proof-evidence">
+        <div class="photo-grid">
+          <img src="images/pans/pan-01.png" alt="Tava çizik örneği 1" loading="lazy">
+          <img src="images/pans/pan-02.png" alt="Tava çizik örneği 2" loading="lazy">
+          <img src="images/pans/pan-03.png" alt="Tava çizik örneği 3" loading="lazy">
+          <img src="images/pans/pan-04.png" alt="Tava çizik örneği 4" loading="lazy">
+          <img src="images/pans/pan-05.png" alt="Tava çizik örneği 5" loading="lazy">
+          <img src="images/pans/pan-06.png" alt="Tava çizik örneği 6" loading="lazy">
+        </div>
+        <div class="freq-chart">
+          <div class="freq-bar">
+            <div class="freq-bar-fill" style="height:65%"></div>
+            <span class="freq-bar-label">1.1 Hz</span>
+          </div>
+          <div class="freq-bar">
+            <div class="freq-bar-fill" style="height:49%"></div>
+            <span class="freq-bar-label">12.7 Hz</span>
+          </div>
+          <div class="freq-bar">
+            <div class="freq-bar-fill" style="height:44%"></div>
+            <span class="freq-bar-label">18.0 Hz</span>
+          </div>
+          <div class="freq-bar">
+            <div class="freq-bar-fill" style="height:41%"></div>
+            <span class="freq-bar-label">21.8 Hz</span>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- ── STEP 02: İskelet Çıkarma ── -->
+    <div class="proof-panel reveal">
+      <div class="proof-info">
+        <div class="proof-num">ADIM 02</div>
+        <h3>İskelet Çıkarma</h3>
+        <p>Font renderlama ile elde edilen dolgu harfler, Zhang-Suen morfolojik inceltme algoritması ile 1 piksel genişliğinde iskelet hatlara dönüştürüldü. Cross kernel ile minimal genişletme uygulanarak kılcal çizik görünümü elde edildi.</p>
+        <div class="proof-badge">Zhang-Suen Thinning &rarr; Cross Kernel (3&times;3) &rarr; 77 glif</div>
+      </div>
+      <div class="proof-evidence">
+        <div class="svg-compare">
+          <div class="svg-box">
+            <span class="svg-box-label">Dolgu</span>
+            <svg viewBox="0 0 400 400" width="100%" style="max-width:160px">
+              <text x="200" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="300" font-weight="bold" fill="#E8DFD0">A</text>
+            </svg>
+          </div>
+          <span class="svg-arrow">&rarr;</span>
+          <div class="svg-box">
+            <span class="svg-box-label">İskelet</span>
+            <svg viewBox="60 100 280 280" width="100%" style="max-width:160px">
+              <path d="M 186.0 165.0 L 163.0 255.0 L 130.0 309.0 L 153.0 309.0 L 147.0 300.0 L 166.0 257.0 L 228.0 256.0 L 248.0 298.0 L 242.0 309.0 L 252.0 302.0 L 264.0 311.0 L 231.0 255.0 L 208.0 168.0 L 193.0 174.0 M 196.0 176.0 L 211.0 203.0 L 229.0 250.0 L 227.0 255.0 L 173.0 257.0 L 165.0 252.0 L 190.0 182.0"
+                    fill="none" stroke="#E8DFD0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 03: Organik Distorsiyon ── -->
+    <div class="proof-panel reveal">
+      <div class="proof-info">
+        <div class="proof-num">ADIM 03</div>
+        <h3>Organik Distorsiyon</h3>
+        <p>İskelet hatlarına gerçek tava çizik profilinden elde edilen frekans ve genlik verileriyle sinüzoidal yer değiştirme, köşe yumuşatma ve mikro titreşim uygulandı.</p>
+        <table class="proof-table">
+          <thead>
+            <tr><th>Parametre</th><th>Değer</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>roughness</td><td>1.8</td></tr>
+            <tr><td>amplitude</td><td>0.008</td></tr>
+            <tr><td>jitter_sigma</td><td>0.002</td></tr>
+            <tr><td>frequencies</td><td>1.1, 12.7, 18.0, 21.8</td></tr>
+            <tr><td>angle_bias</td><td>171°</td></tr>
+            <tr><td>segment_length</td><td>0.014</td></tr>
+          </tbody>
+        </table>
+        <div class="proof-badge">scratch_profile.json &rarr; distort_strokes.py --profile</div>
+      </div>
+      <div class="proof-evidence">
+        <div class="svg-compare">
+          <div class="svg-box">
+            <span class="svg-box-label">Temiz</span>
+            <svg viewBox="60 100 280 280" width="100%" style="max-width:160px">
+              <path d="M 186.0 165.0 L 163.0 255.0 L 130.0 309.0 L 153.0 309.0 L 147.0 300.0 L 166.0 257.0 L 228.0 256.0 L 248.0 298.0 L 242.0 309.0 L 252.0 302.0 L 264.0 311.0 L 231.0 255.0 L 208.0 168.0 L 193.0 174.0 M 196.0 176.0 L 211.0 203.0 L 229.0 250.0 L 227.0 255.0 L 173.0 257.0 L 165.0 252.0 L 190.0 182.0"
+                    fill="none" stroke="rgba(200,191,176,0.4)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="svg-arrow">&rarr;</span>
+          <div class="svg-box">
+            <span class="svg-box-label">Distorted</span>
+            <svg viewBox="0 0 1000 1000" width="100%" style="max-width:160px">
+              <path d="M 469.11 328.73 L 465.37 314.09 L 460.23 308.46 L 460.44 292.17 L 456.88 281.04 L 451.95 269.44 L 449.87 255.11 L 444.49 246.10 L 439.62 235.65 L 442.39 221.92 L 435.41 211.73 L 435.34 194.54 L 429.36 185.69 L 429.66 172.45 L 421.29 164.48 L 420.72 152.76 L 419.88 138.94 L 411.33 128.38 L 406.69 119.25 L 400.73 108.02 L 398.26 96.22 L 390.57 85.80 L 384.51 75.65 L 377.58 63.96 L 370.44 55.21 L 365.46 45.19 L 361.01 37.63 L 351.28 27.38 L 345.34 17.43 L 339.24 2.13 L 350.80 2.71 L 361.82 3.91 L 373.76 1.92 L 386.07 0.34 L 393.73 4.67 L 394.79 17.53 L 386.52 23.12 L 385.93 32.20 L 392.10 44.72 L 398.01 53.63 L 402.25 64.43 L 408.39 78.76 L 412.63 82.41 L 415.19 99.42 L 421.27 109.74 L 424.02 119.87 L 434.79 119.91 L 442.36 116.41 L 453.69 121.59 L 470.20 121.16 L 481.15 123.87 L 491.89 121.76 L 504.34 122.38 L 514.70 121.22 L 531.67 123.38 L 539.59 120.57 L 553.02 119.47 L 562.07 121.91 L 566.03 115.14 L 574.46 100.36 L 574.75 93.16 L 582.72 81.91 L 587.54 71.04 L 595.86 62.37 L 598.01 51.49 L 605.29 38.25 L 604.66 30.27 L 600.83 21.96 L 596.81 17.15 L 596.85 4.59 L 602.28 7.69 L 612.44 13.28 L 617.53 11.19 L 623.48 10.98 L 630.00 -2.74 L 643.33 2.93 L 641.82 13.38 L 636.84 22.55 L 629.31 35.37 L 624.19 44.40 L 616.63 56.32 L 613.75 67.56 L 605.11 75.08 L 596.31 86.77 L 592.70 92.55 L 580.93 106.51 L 576.41 118.81 L 569.76 125.30 L 563.16 136.42 L 558.43 148.05 L 555.50 164.67 L 556.25 170.51 L 549.95 180.09 L 549.18 193.56 L 544.89 205.79 L 544.09 216.74 L 543.83 230.72 L 541.39 243.30 L 544.24 251.16 L 537.93 269.09 L 536.26 278.28 L 531.66 286.58 L 528.34 298.21 L 526.48 311.48 L 519.17 321.82 L 506.23 323.30 L 490.15 314.28 L 485.37 311.49 M 492.46 303.09 L 499.34 294.56 L 499.51 284.61 L 509.98 272.72 L 509.59 263.35 L 521.03 249.22 L 524.69 241.92 L 526.14 232.66 L 533.02 218.53 L 538.70 208.63 L 540.47 197.57 L 545.51 183.47 L 548.60 173.74 L 558.84 158.94 L 563.56 148.22 L 565.88 138.63 L 560.32 122.92 L 551.16 120.11 L 542.65 119.96 L 525.63 118.52 L 511.97 114.29 L 502.93 120.62 L 487.34 117.21 L 477.30 120.52 L 459.65 121.85 L 451.19 119.09 L 440.11 122.39 L 427.24 129.89 L 424.54 133.57 L 427.29 142.77 L 430.01 152.69 L 434.82 167.31 L 438.63 178.25 L 439.95 188.07 L 448.34 200.25 L 450.40 210.25 L 458.36 222.26 L 457.74 234.87 L 461.76 247.61 L 464.80 256.79 L 471.45 266.78 L 473.10 281.33 L 475.63 293.65"
+                    fill="none" stroke="#E4322B" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 04: Font Üretimi ── -->
+    <div class="proof-panel reveal">
+      <div class="proof-info">
+        <div class="proof-num">ADIM 04</div>
+        <h3>Font Üretimi</h3>
+        <p>Distorted SVG glifleri fontTools/FontBuilder ile TTF fontuna derlendi, ardından Brotli ile WOFF2 formatına sıkıştırıldı. %53 boyut azalması sağlandı.</p>
+        <div class="pipeline-flow">
+          <div class="pipeline-node">SVG &times;77</div>
+          <span class="pipeline-arrow">&rarr;</span>
+          <div class="pipeline-node">fontTools</div>
+          <span class="pipeline-arrow">&rarr;</span>
+          <div class="pipeline-node">TTF 28KB</div>
+          <span class="pipeline-arrow">&rarr;</span>
+          <div class="pipeline-node active">WOFF2 13KB</div>
+        </div>
+        <div class="proof-badge">fontTools + FontBuilder &rarr; Brotli WOFF2</div>
+      </div>
+      <div class="proof-evidence">
+        <div class="proof-specimen">
+          <div class="proof-specimen-text">AaBbÇç<br>GğIıİi</div>
+        </div>
+        <div class="proof-metrics">
+          <div class="proof-metric">
+            <div class="proof-metric-val">1000</div>
+            <div class="proof-metric-label">UPM</div>
+          </div>
+          <div class="proof-metric">
+            <div class="proof-metric-val">800</div>
+            <div class="proof-metric-label">Ascent</div>
+          </div>
+          <div class="proof-metric">
+            <div class="proof-metric-val">-200</div>
+            <div class="proof-metric-label">Descent</div>
+          </div>
+          <div class="proof-metric">
+            <div class="proof-metric-val">700</div>
+            <div class="proof-metric-label">Cap</div>
+          </div>
+          <div class="proof-metric">
+            <div class="proof-metric-val">500</div>
+            <div class="proof-metric-label">X-height</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
