@@ -12,8 +12,11 @@ from pathlib import Path
 
 import click
 import colorlog
+import cv2
+import numpy as np
+from PIL import Image, ImageDraw
 
-from generate_letter_scratches import letter_contours_to_strokes
+from generate_letter_scratches import letter_contours_to_strokes, load_font, StrokeConfig
 
 logger = colorlog.getLogger(__name__)
 logger.setLevel("INFO")
@@ -35,22 +38,99 @@ TURKISH_CHARS = {
 }
 
 
+def skeletonize(binary: np.ndarray) -> np.ndarray:
+    """Zhang-Suen thinning via OpenCV morphology.
+
+    Repeatedly erodes and subtracts until only the medial axis remains.
+    """
+    skeleton = np.zeros_like(binary)
+    element = cv2.getStructuringElement(cv2.MORPH_CROSS, (3, 3))
+    temp = binary.copy()
+    while True:
+        eroded = cv2.erode(temp, element)
+        dilated = cv2.dilate(eroded, element)
+        diff = cv2.subtract(temp, dilated)
+        skeleton = cv2.bitwise_or(skeleton, diff)
+        temp = eroded.copy()
+        if cv2.countNonZero(temp) == 0:
+            break
+    return skeleton
+
+
+def thin_letter_contours(letter: str, font_size: int = 200, erosion: int = 3):
+    """Extract hairline scratch-like contours via skeleton + thin dilation.
+
+    Simple and clean approach:
+    1. Render letter as filled white on black
+    2. Skeletonize to get 1-pixel-wide medial axis
+    3. Dilate with small ellipse kernel for thin tube
+    4. Extract contours preserving holes
+    """
+    temp_size = StrokeConfig.TEMP_IMG_SIZE
+    temp_img = Image.new("L", (temp_size, temp_size), color=0)
+    temp_draw = ImageDraw.Draw(temp_img)
+
+    font = load_font(font_size)
+    bbox = temp_draw.textbbox((0, 0), letter, font=font)
+    lw = bbox[2] - bbox[0]
+    lh = bbox[3] - bbox[1]
+    lx = (temp_size - lw) // 2
+    ly = (temp_size - lh) // 2
+    temp_draw.text((lx, ly), letter, fill=255, font=font)
+
+    gray = np.array(temp_img)
+    _, binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+
+    # Skeletonize: reduce to 1-pixel-wide medial axis
+    skeleton = skeletonize(binary)
+
+    # Dilate skeleton to create thin tube — 2 iterations for visible strokes
+    tube_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+    thin_img = cv2.dilate(skeleton, tube_kernel, iterations=2)
+
+    # Extract contours preserving holes (O, 8, etc.)
+    contours, _ = cv2.findContours(thin_img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+    strokes = []
+    for contour in contours:
+        epsilon = 0.012 * cv2.arcLength(contour, True)
+        simplified = cv2.approxPolyDP(contour, epsilon, True)
+
+        stroke = []
+        for point in simplified:
+            x, y = point[0]
+            stroke.append((float(x) / temp_size, float(y) / temp_size))
+
+        if len(stroke) > 1:
+            strokes.append(stroke)
+
+    return strokes
+
+
 @click.command()
 @click.option("--output", default="output/glyph_library_complete.json", help="Output path")
 @click.option("--font-size", default=200, help="Font size for contour extraction")
-def build_library(output: str, font_size: int):
+@click.option("--thin", is_flag=True, default=False,
+              help="Use thin scratch-like extraction (skeleton + erosion)")
+@click.option("--erosion", default=3, type=int,
+              help="Erosion iterations for --thin mode (higher = thinner)")
+def build_library(output: str, font_size: int, thin: bool, erosion: int):
     """Build complete glyph library from font contour extraction."""
     all_chars = []
     for group in TURKISH_CHARS.values():
         all_chars.extend(group)
 
-    logger.info(f"Building glyph library for {len(all_chars)} characters...")
+    mode = "thin skeleton" if thin else "standard contour"
+    logger.info(f"Building glyph library for {len(all_chars)} characters ({mode})...")
 
     glyphs = {}
     failed = []
 
     for char in all_chars:
-        strokes = letter_contours_to_strokes(char, font_size)
+        if thin:
+            strokes = thin_letter_contours(char, font_size, erosion)
+        else:
+            strokes = letter_contours_to_strokes(char, font_size)
         if strokes:
             # Convert tuples to lists for JSON serialization
             json_strokes = [[list(pt) for pt in stroke] for stroke in strokes]

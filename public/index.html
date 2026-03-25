@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tavaların Dili — Tava Çiziklerinden Doğan Font</title>
+<title>Tavaların Dili — Tefal Tava Çiziklerinden Doğan Font</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
   @font-face {
     font-family: 'Tava Beige';
@@ -18,384 +18,684 @@
   }
 
   :root {
-    --surface: #0c0b09;
-    --surface-raised: #151412;
-    --surface-warm: #1a1814;
-    --copper: #c47a4a;
-    --copper-bright: #e09060;
-    --copper-dim: #7a4e30;
-    --cream: #e8e0d0;
-    --cream-dim: #a09888;
-    --cream-faint: #605848;
-    --scratch: #d4cbb8;
-    --tefal-red: #d42020;
+    /* Tefal brand */
+    --tefal-red: #E4322B;
+    --tefal-red-hover: #C92A24;
+    --tefal-red-light: #FDE8E7;
+    --tefal-red-glow: rgba(228,50,43,0.12);
+
+    /* Neutrals */
+    --white: #FFFFFF;
+    --off-white: #FAFAF8;
+    --light-gray: #F2F1EF;
+    --border: #E5E3E0;
+    --mid-gray: #9A9590;
+    --text-secondary: #6B6560;
+    --text-primary: #1A1816;
+    --dark: #111110;
+
+    /* Pan surface palette */
+    --pan: #0C0B09;
+    --pan-raised: #151412;
+    --pan-warm: #1E1C18;
+    --scratch: #C8BFB0;
+    --scratch-bright: #E8DFD0;
+
+    /* Typography */
     --font-display: 'Tava Beige', serif;
-    --font-editorial: 'Cormorant Garamond', 'Georgia', serif;
+    --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-mono: 'DM Mono', 'Courier New', monospace;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--surface);
-    color: var(--cream);
-    font-family: var(--font-editorial);
+    background: var(--white);
+    color: var(--text-primary);
+    font-family: var(--font-body);
     min-height: 100vh;
     overflow-x: hidden;
-  }
-
-  /* ---- Grain overlay ---- */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.035;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    background-size: 256px;
+    -webkit-font-smoothing: antialiased;
   }
 
   /* ---- Reveal animations ---- */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes scratchIn {
-    from { opacity: 0; transform: scaleX(0); }
-    to { opacity: 1; transform: scaleX(1); }
-  }
-
-  @keyframes gentlePulse {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 0.7; }
-  }
-
-  @keyframes slideReveal {
-    from { clip-path: inset(0 100% 0 0); }
-    to { clip-path: inset(0 0% 0 0); }
-  }
-
   .reveal {
     opacity: 0;
-    animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    transform: translateY(32px);
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  /* ---- Navigation ---- */
-  nav {
+  .stagger > .reveal:nth-child(1) { transition-delay: 0s; }
+  .stagger > .reveal:nth-child(2) { transition-delay: 0.1s; }
+  .stagger > .reveal:nth-child(3) { transition-delay: 0.2s; }
+  .stagger > .reveal:nth-child(4) { transition-delay: 0.3s; }
+
+  /* ---- Container ---- */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* ======== HEADER ======== */
+  header {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    transition: box-shadow 0.3s;
+  }
+
+  header.scrolled {
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+  }
+
+  .header-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
-    background: linear-gradient(180deg, rgba(12,11,9,0.95) 0%, rgba(12,11,9,0) 100%);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    height: 72px;
   }
 
-  nav .logo {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--copper);
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
   }
 
-  nav .nav-links {
+  .tefal-logo {
+    height: 28px;
+    width: auto;
+  }
+
+  .header-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+  }
+
+  .project-name {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+  }
+
+  .header-nav {
     display: flex;
     gap: 32px;
     list-style: none;
   }
 
-  nav .nav-links a {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--cream-dim);
+  .header-nav a {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
     text-decoration: none;
-    transition: color 0.3s;
-  }
-
-  nav .nav-links a:hover { color: var(--copper-bright); }
-
-  /* ---- Hero ---- */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 120px 24px 80px;
+    transition: color 0.25s;
     position: relative;
   }
 
-  .hero::before {
+  .header-nav a:hover {
+    color: var(--tefal-red);
+  }
+
+  /* ======== HERO ======== */
+  .hero {
+    padding: 160px 0 100px;
+    background: var(--off-white);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
     content: '';
     position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(196,122,74,0.06) 0%, transparent 70%),
-      radial-gradient(circle at 20% 80%, rgba(196,122,74,0.03) 0%, transparent 40%);
-    pointer-events: none;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border);
   }
 
-  .hero-overline {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    color: var(--copper);
-    margin-bottom: 40px;
-    animation-delay: 0.2s;
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--tefal-red-light);
+    border-radius: 100px;
+    margin-bottom: 32px;
   }
 
-  .hero h1 {
+  .hero-badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--tefal-red);
+  }
+
+  .hero-badge-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--tefal-red);
+    letter-spacing: 0.3px;
+  }
+
+  .hero-title {
     font-family: var(--font-display);
-    font-size: clamp(60px, 12vw, 160px);
-    line-height: 0.95;
-    letter-spacing: 6px;
-    color: var(--scratch);
-    margin-bottom: 20px;
-    animation-delay: 0.4s;
-    text-shadow: 0 0 80px rgba(196,122,74,0.15);
+    font-size: clamp(64px, 12vw, 160px);
+    line-height: 0.92;
+    color: var(--text-primary);
+    letter-spacing: 3px;
+    margin-bottom: 32px;
+  }
+
+  .hero-title .red {
+    color: var(--tefal-red);
   }
 
   .hero-subtitle {
-    font-family: var(--font-editorial);
-    font-size: clamp(18px, 2.5vw, 26px);
+    font-family: var(--font-body);
+    font-size: clamp(17px, 2vw, 20px);
     font-weight: 300;
-    font-style: italic;
-    color: var(--cream-dim);
-    max-width: 560px;
-    line-height: 1.6;
-    margin-bottom: 50px;
-    animation-delay: 0.7s;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 540px;
+    margin-bottom: 40px;
   }
 
-  .scratch-line {
-    width: 120px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--copper), transparent);
-    animation: scratchIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1s forwards;
-    opacity: 0;
-    transform-origin: left;
-  }
-
-  .scroll-hint {
-    position: absolute;
-    bottom: 40px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--cream-faint);
-    animation: gentlePulse 3s ease-in-out infinite;
-  }
-
-  /* ---- Sections ---- */
-  section {
-    padding: 100px 24px;
-    position: relative;
-  }
-
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .section-label {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: var(--copper-dim);
-    margin-bottom: 48px;
+  .hero-actions {
     display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
+    padding: 14px 28px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: pointer;
+    border: none;
   }
 
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, var(--copper-dim), transparent);
-    max-width: 200px;
+  .btn-red {
+    background: var(--tefal-red);
+    color: var(--white);
   }
 
-  /* ---- Specimen ---- */
-  .specimen-row {
-    margin-bottom: 56px;
+  .btn-red:hover {
+    background: var(--tefal-red-hover);
+    box-shadow: 0 4px 16px rgba(228,50,43,0.25);
+    transform: translateY(-1px);
   }
 
-  .specimen-chars {
-    font-family: var(--font-display);
-    font-size: clamp(36px, 6vw, 64px);
-    line-height: 1.5;
-    color: var(--scratch);
-    letter-spacing: 8px;
-    word-break: break-all;
+  .btn-outline {
+    background: var(--white);
+    color: var(--text-primary);
+    border: 1.5px solid var(--border);
   }
 
-  .specimen-note {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--cream-faint);
-    margin-top: 12px;
+  .btn-outline:hover {
+    border-color: var(--tefal-red);
+    color: var(--tefal-red);
+    transform: translateY(-1px);
   }
 
-  /* ---- Editorial quote section ---- */
-  .editorial {
-    background: var(--surface-warm);
-    border-top: 1px solid rgba(196,122,74,0.1);
-    border-bottom: 1px solid rgba(196,122,74,0.1);
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 64px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
   }
 
-  .editorial-grid {
+  .hero-stat-val {
+    font-family: var(--font-body);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .hero-stat-label {
+    font-size: 13px;
+    color: var(--mid-gray);
+    margin-top: 4px;
+  }
+
+  /* Decorative pan circle */
+  .hero-visual {
+    position: absolute;
+    top: 50%;
+    right: -5%;
+    transform: translateY(-50%);
+    width: clamp(300px, 40vw, 560px);
+    height: clamp(300px, 40vw, 560px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, #2a2722 0%, var(--pan) 70%);
+    opacity: 0.08;
+    pointer-events: none;
+  }
+
+  /* ======== ABOUT ======== */
+  .about {
+    padding: 100px 0;
+    background: var(--white);
+  }
+
+  .about-grid {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 1fr;
     gap: 80px;
     align-items: center;
   }
 
-  .editorial-left {
-    font-family: var(--font-display);
-    font-size: clamp(48px, 8vw, 100px);
-    line-height: 1;
-    color: var(--scratch);
-    letter-spacing: 4px;
-    opacity: 0.9;
+  .about-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--tefal-red);
+    margin-bottom: 20px;
   }
 
-  .editorial-right {
-    border-left: 1px solid rgba(196,122,74,0.2);
-    padding-left: 60px;
-  }
-
-  .editorial-right blockquote {
-    font-family: var(--font-editorial);
-    font-size: clamp(22px, 3vw, 32px);
-    font-weight: 300;
-    font-style: italic;
-    line-height: 1.7;
-    color: var(--cream-dim);
+  .about h2 {
+    font-family: var(--font-body);
+    font-size: clamp(28px, 3.5vw, 40px);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text-primary);
     margin-bottom: 24px;
   }
 
-  .editorial-right cite {
+  .about p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--text-secondary);
+  }
+
+  .about p + p {
+    margin-top: 16px;
+  }
+
+  .about-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--pan);
+    border-radius: 16px;
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+    min-height: 360px;
+  }
+
+  .about-display::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(200,191,176,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .about-display-text {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 6vw, 72px);
+    color: var(--scratch-bright);
+    letter-spacing: 6px;
+    line-height: 1.4;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ======== SPECIMEN (dark section) ======== */
+  .specimen {
+    padding: 100px 0;
+    background: var(--pan);
+    color: var(--scratch);
+    position: relative;
+  }
+
+  /* Subtle grain on dark sections */
+  .specimen::after,
+  .glyphmap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px;
+  }
+
+  .specimen .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .specimen-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 64px;
+  }
+
+  .specimen-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--tefal-red);
+    margin-bottom: 16px;
+  }
+
+  .specimen-title {
+    font-family: var(--font-body);
+    font-size: clamp(28px, 3.5vw, 40px);
+    font-weight: 700;
+    color: var(--scratch-bright);
+  }
+
+  .specimen-count {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--mid-gray);
+  }
+
+  .specimen-block {
+    margin-bottom: 56px;
+    position: relative;
+  }
+
+  .specimen-label {
     font-family: var(--font-mono);
     font-size: 11px;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--copper-dim);
-    font-style: normal;
+    color: var(--mid-gray);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 
-  /* ---- Type tester ---- */
-  .tester-section {
-    background: var(--surface-raised);
+  .specimen-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(200,191,176,0.1);
   }
 
-  .tester-area {
-    position: relative;
+  .specimen-chars {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 6.5vw, 72px);
+    line-height: 1.6;
+    color: var(--scratch-bright);
+    letter-spacing: 8px;
+    word-break: break-all;
+  }
+
+  .specimen-chars.nums {
+    font-size: clamp(48px, 7vw, 84px);
+    letter-spacing: 14px;
+  }
+
+  .specimen-chars.punct {
+    letter-spacing: 28px;
+  }
+
+  /* ======== MARQUEE ======== */
+  .marquee-section {
+    padding: 48px 0;
+    background: var(--tefal-red);
+    overflow: hidden;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 50s linear infinite;
+  }
+
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+
+  .marquee-text {
+    font-family: var(--font-display);
+    font-size: clamp(60px, 10vw, 120px);
+    color: rgba(255,255,255,0.2);
+    white-space: nowrap;
+    letter-spacing: 16px;
+    padding: 0 40px;
+    transition: color 0.3s;
+  }
+
+  .marquee-track:hover .marquee-text {
+    color: rgba(255,255,255,0.4);
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ======== TYPE TESTER ======== */
+  .tester {
+    padding: 100px 0;
+    background: var(--light-gray);
+  }
+
+  .tester-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--tefal-red);
+    margin-bottom: 16px;
+  }
+
+  .tester h2 {
+    font-family: var(--font-body);
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 40px;
+  }
+
+  .tester-card {
+    background: var(--white);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
   }
 
   .tester-input {
     width: 100%;
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(196,122,74,0.15);
-    color: var(--scratch);
+    color: var(--text-primary);
     font-family: var(--font-display);
     font-size: clamp(36px, 7vw, 72px);
-    padding: 32px 0;
+    padding: 40px;
     outline: none;
     resize: none;
-    min-height: 120px;
+    min-height: 160px;
     line-height: 1.3;
     letter-spacing: 3px;
-    transition: border-color 0.3s;
-  }
-
-  .tester-input:focus {
-    border-color: var(--copper);
   }
 
   .tester-input::placeholder {
-    color: var(--cream-faint);
+    color: var(--border);
   }
 
-  .tester-controls {
+  .tester-toolbar {
     display: flex;
     align-items: center;
     gap: 20px;
-    padding: 24px 0;
+    padding: 20px 40px;
+    border-top: 1px solid var(--border);
+    background: var(--off-white);
   }
 
-  .tester-controls label {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--cream-faint);
-    white-space: nowrap;
+  .tester-toolbar label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--mid-gray);
   }
 
-  .range-track {
+  .range-slider {
     flex: 1;
-    max-width: 280px;
+    max-width: 240px;
     -webkit-appearance: none;
     appearance: none;
-    height: 1px;
-    background: var(--cream-faint);
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
     outline: none;
     cursor: pointer;
   }
 
-  .range-track::-webkit-slider-thumb {
+  .range-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 14px;
-    height: 14px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    background: var(--copper);
+    background: var(--tefal-red);
     cursor: pointer;
-    border: 2px solid var(--surface-raised);
-    box-shadow: 0 0 12px rgba(196,122,74,0.3);
+    border: 3px solid var(--white);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    transition: box-shadow 0.2s;
   }
 
-  .range-track::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
+  .range-slider::-webkit-slider-thumb:hover {
+    box-shadow: 0 2px 8px rgba(228,50,43,0.3);
+  }
+
+  .range-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    background: var(--copper);
+    background: var(--tefal-red);
     cursor: pointer;
-    border: 2px solid var(--surface-raised);
+    border: 3px solid var(--white);
   }
 
   .size-display {
     font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--copper);
-    min-width: 44px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--tefal-red);
+    min-width: 48px;
     text-align: right;
   }
 
-  /* ---- Glyph grid ---- */
+  /* Toggle dark/light */
+  .bg-toggle {
+    margin-left: auto;
+    display: flex;
+    gap: 4px;
+    background: var(--light-gray);
+    border-radius: 8px;
+    padding: 3px;
+  }
+
+  .bg-toggle button {
+    width: 32px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .bg-toggle button:hover { transform: scale(1.05); }
+
+  .bg-toggle .toggle-light {
+    background: var(--white);
+  }
+
+  .bg-toggle .toggle-dark {
+    background: var(--pan);
+  }
+
+  .bg-toggle button.active {
+    border-color: var(--tefal-red);
+    box-shadow: 0 0 0 1px var(--tefal-red);
+  }
+
+  .tester-card.dark-mode {
+    background: var(--pan);
+    border-color: rgba(200,191,176,0.1);
+  }
+
+  .tester-card.dark-mode .tester-input {
+    color: var(--scratch-bright);
+  }
+
+  .tester-card.dark-mode .tester-input::placeholder {
+    color: rgba(200,191,176,0.2);
+  }
+
+  .tester-card.dark-mode .tester-toolbar {
+    background: var(--pan-raised);
+    border-top-color: rgba(200,191,176,0.08);
+  }
+
+  /* ======== GLYPH MAP ======== */
+  .glyphmap {
+    padding: 100px 0;
+    background: var(--pan);
+    position: relative;
+  }
+
+  .glyphmap .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .glyphmap-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--tefal-red);
+    margin-bottom: 16px;
+  }
+
+  .glyphmap-title {
+    font-family: var(--font-body);
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 700;
+    color: var(--scratch-bright);
+    margin-bottom: 48px;
+  }
+
   .glyph-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
-    gap: 4px;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 3px;
   }
 
   .glyph-cell {
@@ -404,316 +704,579 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: var(--surface-raised);
-    border: 1px solid rgba(196,122,74,0.06);
-    border-radius: 4px;
+    background: var(--pan-raised);
+    border-radius: 8px;
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     cursor: default;
     position: relative;
   }
 
   .glyph-cell:hover {
-    background: var(--surface-warm);
-    border-color: rgba(196,122,74,0.25);
-    transform: scale(1.08);
+    background: var(--pan-warm);
+    transform: scale(1.1);
     z-index: 2;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(228,50,43,0.3);
   }
 
   .glyph-char {
     font-family: var(--font-display);
     font-size: 28px;
-    color: var(--scratch);
+    color: var(--scratch-bright);
     line-height: 1;
+  }
+
+  .glyph-cell:hover .glyph-char {
+    color: var(--white);
   }
 
   .glyph-code {
     font-family: var(--font-mono);
-    font-size: 8px;
-    color: var(--cream-faint);
+    font-size: 7px;
+    color: var(--mid-gray);
     margin-top: 6px;
     letter-spacing: 0.5px;
+    opacity: 0.5;
   }
 
-  /* ---- Metrics strip ---- */
-  .metrics {
+  .glyph-cell:hover .glyph-code {
+    opacity: 1;
+    color: var(--tefal-red);
+  }
+
+  /* Metrics */
+  .metrics-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 1px;
-    background: rgba(196,122,74,0.08);
-    border-radius: 8px;
+    background: rgba(200,191,176,0.08);
+    border-radius: 12px;
     overflow: hidden;
-    margin-top: 80px;
+    margin-top: 64px;
   }
 
-  .metric {
-    background: var(--surface);
-    padding: 28px 24px;
+  .metric-card {
+    background: var(--pan-raised);
+    padding: 28px 20px;
     text-align: center;
+    transition: background 0.3s;
   }
 
-  .metric-value {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--scratch);
+  .metric-card:hover {
+    background: var(--pan-warm);
+  }
+
+  .metric-val {
+    font-family: var(--font-body);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--scratch-bright);
     margin-bottom: 6px;
   }
 
   .metric-label {
-    font-family: var(--font-mono);
-    font-size: 9px;
-    letter-spacing: 3px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--cream-faint);
+    color: var(--mid-gray);
   }
 
-  /* ---- Download ---- */
-  .download-section {
+  /* ======== PROCESS ======== */
+  .process {
+    padding: 100px 0;
+    background: var(--white);
+  }
+
+  .process-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--tefal-red);
+    margin-bottom: 16px;
+  }
+
+  .process h2 {
+    font-family: var(--font-body);
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 56px;
+  }
+
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  .process-card {
+    padding: 32px 24px;
+    background: var(--off-white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .process-card:hover {
+    border-color: var(--tefal-red);
+    box-shadow: 0 4px 20px var(--tefal-red-glow);
+    transform: translateY(-4px);
+  }
+
+  .process-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--tefal-red);
+    margin-bottom: 20px;
+  }
+
+  .process-card h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+
+  .process-card p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  /* ======== DOWNLOAD ======== */
+  .download {
+    padding: 100px 0;
+    background: var(--tefal-red);
+    color: var(--white);
     text-align: center;
-    padding: 120px 24px;
     position: relative;
+    overflow: hidden;
   }
 
-  .download-section::before {
+  .download::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(196,122,74,0.04) 0%, transparent 70%);
+    background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255,255,255,0.06) 0%, transparent 70%);
     pointer-events: none;
   }
 
-  .download-heading {
+  .download .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .download-title {
     font-family: var(--font-display);
-    font-size: clamp(36px, 6vw, 64px);
-    color: var(--scratch);
-    margin-bottom: 16px;
+    font-size: clamp(48px, 8vw, 96px);
     letter-spacing: 4px;
+    margin-bottom: 12px;
+    color: var(--white);
   }
 
   .download-sub {
-    font-family: var(--font-editorial);
     font-size: 18px;
     font-weight: 300;
-    font-style: italic;
-    color: var(--cream-dim);
+    color: rgba(255,255,255,0.75);
     margin-bottom: 48px;
   }
 
-  .download-buttons {
+  .download-btns {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     justify-content: center;
     flex-wrap: wrap;
   }
 
-  .dl-btn {
-    display: inline-flex;
+  .btn-white {
+    background: var(--white);
+    color: var(--tefal-red);
+  }
+
+  .btn-white:hover {
+    background: var(--off-white);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+  }
+
+  .btn-white-outline {
+    background: transparent;
+    color: var(--white);
+    border: 1.5px solid rgba(255,255,255,0.4);
+  }
+
+  .btn-white-outline:hover {
+    border-color: var(--white);
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-2px);
+  }
+
+  /* ======== FOOTER ======== */
+  footer {
+    background: var(--dark);
+    color: rgba(255,255,255,0.5);
+    padding: 60px 0 40px;
+  }
+
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 32px;
+  }
+
+  .footer-brand {
+    display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 16px 36px;
+    gap: 16px;
+  }
+
+  .footer-logo {
+    height: 22px;
+    width: auto;
+    opacity: 0.7;
+  }
+
+  .footer-brand-text {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
     text-decoration: none;
+    transition: color 0.25s;
+  }
+
+  .footer-links a:hover {
+    color: var(--white);
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-copy {
+    font-size: 12px;
+  }
+
+  .footer-tech {
     font-family: var(--font-mono);
     font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    border-radius: 4px;
-    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    color: rgba(255,255,255,0.25);
   }
 
-  .dl-btn.primary {
-    background: var(--copper);
-    color: var(--surface);
-    border: 1px solid var(--copper);
-  }
+  /* ======== RESPONSIVE ======== */
+  @media (max-width: 900px) {
+    .container { padding: 0 24px; }
+    header .container { padding: 0 24px; }
+    .header-inner { height: 60px; }
+    .header-divider, .project-name { display: none; }
+    .header-nav { gap: 24px; }
+    .header-nav a { font-size: 13px; }
 
-  .dl-btn.primary:hover {
-    background: var(--copper-bright);
-    box-shadow: 0 4px 24px rgba(196,122,74,0.3);
-    transform: translateY(-2px);
-  }
+    .hero { padding: 120px 0 80px; }
+    .hero-visual { display: none; }
+    .hero-stats { gap: 32px; flex-wrap: wrap; }
 
-  .dl-btn.ghost {
-    background: transparent;
-    color: var(--cream-dim);
-    border: 1px solid rgba(196,122,74,0.2);
-  }
-
-  .dl-btn.ghost:hover {
-    border-color: var(--copper);
-    color: var(--copper-bright);
-    transform: translateY(-2px);
-  }
-
-  /* ---- Footer ---- */
-  footer {
-    text-align: center;
-    padding: 48px 24px;
-    border-top: 1px solid rgba(196,122,74,0.08);
-  }
-
-  footer p {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--cream-faint);
-  }
-
-  /* ---- Responsive ---- */
-  @media (max-width: 768px) {
-    nav { padding: 16px 20px; }
-    nav .nav-links { gap: 20px; }
-    nav .nav-links a { font-size: 9px; }
-    section { padding: 60px 20px; }
-    .editorial-grid {
+    .about-grid {
       grid-template-columns: 1fr;
-      gap: 40px;
+      gap: 48px;
     }
-    .editorial-right {
-      border-left: none;
-      padding-left: 0;
-      border-top: 1px solid rgba(196,122,74,0.2);
-      padding-top: 40px;
-    }
-    .glyph-grid {
-      grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
-    }
+    .about-display { min-height: 280px; }
+
+    .specimen-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+    .tester-toolbar { padding: 16px 24px; flex-wrap: wrap; }
+    .tester-input { padding: 28px 24px; }
+    .bg-toggle { margin-left: 0; }
+
+    .glyph-grid { grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); }
     .glyph-char { font-size: 22px; }
+
+    .process-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .footer-top { flex-direction: column; gap: 24px; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+  }
+
+  @media (max-width: 560px) {
+    .header-nav { display: none; }
+    .hero-title { letter-spacing: 1px; }
+    .process-grid { grid-template-columns: 1fr; }
+    .specimen-chars { letter-spacing: 4px; }
+    .marquee-text { letter-spacing: 8px; }
+    .footer-links { flex-wrap: wrap; gap: 16px; }
   }
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="logo">Tava Beige</div>
-  <ul class="nav-links">
-    <li><a href="#specimen">Karakter</a></li>
-    <li><a href="#tester">Dene</a></li>
-    <li><a href="#download">İndir</a></li>
-  </ul>
-</nav>
+<!-- ======== HEADER ======== -->
+<header id="siteHeader">
+  <div class="container">
+    <div class="header-inner">
+      <div class="header-left">
+        <img src="tefal-logo.png" alt="Tefal" class="tefal-logo">
+        <div class="header-divider"></div>
+        <span class="project-name">Tavaların Dili</span>
+      </div>
+      <ul class="header-nav">
+        <li><a href="#specimen">Alfabe</a></li>
+        <li><a href="#tester">Dene</a></li>
+        <li><a href="#process">Nasıl Yapıldı</a></li>
+        <li><a href="#download">İndir</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
 
 <!-- ======== HERO ======== -->
-<div class="hero">
-  <div class="hero-overline reveal">Tava Çiziklerinden Doğan Font</div>
-  <h1 class="reveal">Tavaların<br>Dili</h1>
-  <p class="hero-subtitle reveal">Tefal tavaların yüzeyindeki çiziklerden esinlenerek tasarlanmış bir Türkçe font. Her harf, mutfağın izlerini typografiye taşır.</p>
-  <div class="scratch-line"></div>
-  <div class="scroll-hint">Aşağı Kaydır</div>
+<section class="hero">
+  <div class="container" style="position: relative; z-index: 1;">
+    <div class="hero-badge reveal">
+      <span class="hero-badge-dot"></span>
+      <span class="hero-badge-text">Tefal Kreatif Proje</span>
+    </div>
+    <h1 class="hero-title reveal">Tavaların<br><span class="red">Dili</span></h1>
+    <p class="hero-subtitle reveal">Tefal tavaların yüzeyindeki çiziklerden esinlenerek tasarlanmış, 77 gliflik tam Türkçe destekli bir font.</p>
+    <div class="hero-actions reveal">
+      <a href="#download" class="btn btn-red">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Fontu İndir
+      </a>
+      <a href="#specimen" class="btn btn-outline">Karakterleri Gör</a>
+    </div>
+    <div class="hero-stats reveal">
+      <div>
+        <div class="hero-stat-val">77</div>
+        <div class="hero-stat-label">Glif</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">TTF + WOFF2</div>
+        <div class="hero-stat-label">Format</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">13 KB</div>
+        <div class="hero-stat-label">Dosya Boyutu</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">Tam Türkçe</div>
+        <div class="hero-stat-label">Karakter Desteği</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual"></div>
+</section>
+
+<!-- ======== ABOUT ======== -->
+<section class="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="about-eyebrow">Proje Hakkında</div>
+        <h2>Her tava bir hikaye anlatır. Çizikler, mutfağın sessiz alfabesidir.</h2>
+        <p>Tava Beige, gerçek Tefal tava yüzeylerindeki çizik desenlerinden yola çıkılarak tasarlanmış bir Türkçe fonttur. 40 gerçek tava fotoğrafı analiz edilerek çiziklerin açı, frekans ve yoğunluk profilleri çıkarılmıştır.</p>
+        <p>Harfler, Zhang-Suen iskeletleştirme algoritması ile kılcal çiziklere dönüştürülmüş, ardından gerçek çizik profiline göre organik distorsiyon uygulanmıştır.</p>
+      </div>
+      <div class="about-display reveal">
+        <div class="about-display-text">Çizik<br>ler</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== MARQUEE ======== -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-text">ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ</span>
+    <span class="marquee-text">ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ</span>
+  </div>
 </div>
 
-<!-- ======== EDITORIAL ======== -->
-<section class="editorial">
+<!-- ======== SPECIMEN ======== -->
+<section class="specimen" id="specimen">
   <div class="container">
-    <div class="editorial-grid">
-      <div class="editorial-left">Çizik<br>ler</div>
-      <div class="editorial-right">
-        <blockquote>Her tava bir hikaye anlatır. Şefin eli değdikçe yüzeyde yeni harfler doğar. Bu font, mutfağın sessiz dilini görünür kılar.</blockquote>
-        <cite>— 77 Glif &middot; Tam Türkçe Destek</cite>
+    <div class="specimen-header reveal">
+      <div>
+        <div class="specimen-eyebrow">Karakter Seti</div>
+        <div class="specimen-title">Tüm Alfabe</div>
       </div>
+      <div class="specimen-count">77 glif &middot; UPM 1000</div>
+    </div>
+
+    <div class="specimen-block reveal">
+      <div class="specimen-label">Büyük Harfler <span style="opacity:0.5;">29</span></div>
+      <div class="specimen-chars">ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ</div>
+    </div>
+
+    <div class="specimen-block reveal">
+      <div class="specimen-label">Küçük Harfler <span style="opacity:0.5;">29</span></div>
+      <div class="specimen-chars">abcçdefgğhıijklmnoöprsştuüvyz</div>
+    </div>
+
+    <div class="specimen-block reveal">
+      <div class="specimen-label">Rakamlar <span style="opacity:0.5;">10</span></div>
+      <div class="specimen-chars nums">0123456789</div>
+    </div>
+
+    <div class="specimen-block reveal">
+      <div class="specimen-label">Noktalama <span style="opacity:0.5;">9</span></div>
+      <div class="specimen-chars punct">. , ; : ! ? ' " -</div>
     </div>
   </div>
 </section>
 
 <!-- ======== TYPE TESTER ======== -->
-<section class="tester-section" id="tester">
+<section class="tester" id="tester">
   <div class="container">
-    <div class="section-label">Yazı Dene</div>
-    <div class="tester-area">
-      <textarea class="tester-input" id="testerInput" placeholder="Buraya yaz...">Tavaların Dili</textarea>
-      <div class="tester-controls">
+    <div class="tester-eyebrow reveal">Etkileşimli</div>
+    <h2 class="reveal">Fontu Deneyin</h2>
+    <div class="tester-card reveal" id="testerCard">
+      <textarea class="tester-input" id="testerInput" placeholder="Buraya yazın...">Tavaların Dili</textarea>
+      <div class="tester-toolbar">
         <label>Boyut</label>
-        <input type="range" class="range-track" id="sizeRange" min="18" max="128" value="72">
+        <input type="range" class="range-slider" id="sizeRange" min="18" max="140" value="72">
         <span class="size-display" id="sizeVal">72px</span>
+        <div class="bg-toggle">
+          <button class="toggle-light active" title="Açık arka plan" onclick="setTesterBg('light')"></button>
+          <button class="toggle-dark" title="Koyu arka plan" onclick="setTesterBg('dark')"></button>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ======== SPECIMEN ======== -->
-<section id="specimen">
-  <div class="container">
-    <div class="section-label">Büyük Harfler</div>
-    <div class="specimen-row">
-      <div class="specimen-chars">ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ</div>
-      <div class="specimen-note">29 Harf &middot; Türkçe Alfabe</div>
-    </div>
-
-    <div class="section-label">Küçük Harfler</div>
-    <div class="specimen-row">
-      <div class="specimen-chars">abcçdefgğhıijklmnoöprsştuüvyz</div>
-      <div class="specimen-note">29 Harf &middot; ı ve i Ayrımı</div>
-    </div>
-
-    <div class="section-label">Rakamlar</div>
-    <div class="specimen-row">
-      <div class="specimen-chars">0123456789</div>
-    </div>
-
-    <div class="section-label">Noktalama</div>
-    <div class="specimen-row">
-      <div class="specimen-chars" style="letter-spacing: 24px;">. , ; : ! ? ' " -</div>
     </div>
   </div>
 </section>
 
 <!-- ======== GLYPH MAP ======== -->
-<section style="background: var(--surface-raised);">
+<section class="glyphmap">
   <div class="container">
-    <div class="section-label">Tüm Glifler &middot; 77</div>
+    <div class="glyphmap-eyebrow reveal">Glif Haritası</div>
+    <div class="glyphmap-title reveal">Tüm Karakterler</div>
     <div class="glyph-grid" id="glyphGrid"></div>
 
-    <div class="metrics">
-      <div class="metric">
-        <div class="metric-value">77</div>
-        <div class="metric-label">Toplam Glif</div>
+    <div class="metrics-row reveal">
+      <div class="metric-card">
+        <div class="metric-val">77</div>
+        <div class="metric-label">Glif</div>
       </div>
-      <div class="metric">
-        <div class="metric-value">1000</div>
+      <div class="metric-card">
+        <div class="metric-val">1000</div>
         <div class="metric-label">UPM</div>
       </div>
-      <div class="metric">
-        <div class="metric-value">800</div>
-        <div class="metric-label">Yükseklik</div>
+      <div class="metric-card">
+        <div class="metric-val">800</div>
+        <div class="metric-label">Ascent</div>
       </div>
-      <div class="metric">
-        <div class="metric-value">TTF</div>
+      <div class="metric-card">
+        <div class="metric-val">TTF</div>
         <div class="metric-label">Format</div>
       </div>
-      <div class="metric">
-        <div class="metric-value">WOFF2</div>
-        <div class="metric-label">Web Format</div>
+      <div class="metric-card">
+        <div class="metric-val">WOFF2</div>
+        <div class="metric-label">Web</div>
       </div>
-      <div class="metric">
-        <div class="metric-value">12KB</div>
-        <div class="metric-label">Dosya Boyutu</div>
+      <div class="metric-card">
+        <div class="metric-val">13KB</div>
+        <div class="metric-label">Boyut</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== PROCESS ======== -->
+<section class="process" id="process">
+  <div class="container">
+    <div class="process-eyebrow reveal">Nasıl Yapıldı</div>
+    <h2 class="reveal">Tavadan Fonte: 4 Adım</h2>
+    <div class="process-grid stagger">
+      <div class="process-card reveal">
+        <div class="process-num">01</div>
+        <h3>Çizik Analizi</h3>
+        <p>40 gerçek tava fotoğrafı OpenCV ile analiz edildi. Çizik açıları, frekansları ve yoğunlukları çıkarıldı.</p>
+      </div>
+      <div class="process-card reveal">
+        <div class="process-num">02</div>
+        <h3>İskelet Çıkarma</h3>
+        <p>Harfler Zhang-Suen iskeletleştirme ile kılcal çiziğe benzer ince hatlara dönüştürüldü.</p>
+      </div>
+      <div class="process-card reveal">
+        <div class="process-num">03</div>
+        <h3>Organik Distorsiyon</h3>
+        <p>Gerçek çizik profilinden gelen frekans ve genlik verileriyle doğal bozulma uygulandı.</p>
+      </div>
+      <div class="process-card reveal">
+        <div class="process-num">04</div>
+        <h3>Font Üretimi</h3>
+        <p>SVG glif verileri fontTools ile TTF ve Brotli sıkıştırmalı WOFF2 formatlarına dönüştürüldü.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ======== DOWNLOAD ======== -->
-<section class="download-section" id="download">
-  <div class="download-heading">Fontu İndir</div>
-  <p class="download-sub">Projenizde kullanmak için aşağıdan indirin.</p>
-  <div class="download-buttons">
-    <a href="fonts/TavaBeige-Regular.ttf" download class="dl-btn primary">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      TTF İndir
-    </a>
-    <a href="fonts/TavaBeige-Regular.woff2" download class="dl-btn ghost">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      WOFF2 İndir
-    </a>
+<section class="download" id="download">
+  <div class="container">
+    <div class="download-title reveal">Fontu İndir</div>
+    <p class="download-sub reveal">Projenizde özgürce kullanın.</p>
+    <div class="download-btns reveal">
+      <a href="fonts/TavaBeige-Regular.ttf" download class="btn btn-white">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        TTF İndir
+      </a>
+      <a href="fonts/TavaBeige-Regular.woff2" download class="btn btn-white-outline">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        WOFF2 İndir
+      </a>
+    </div>
   </div>
 </section>
 
+<!-- ======== FOOTER ======== -->
 <footer>
-  <p>Tavaların Dili &mdash; Tefal Tava Çiziklerinden Esinlenerek Üretilmiştir</p>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="tefal-logo.png" alt="Tefal" class="footer-logo">
+        <span class="footer-brand-text">Tavaların Dili</span>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#specimen">Alfabe</a></li>
+        <li><a href="#tester">Dene</a></li>
+        <li><a href="#process">Nasıl Yapıldı</a></li>
+        <li><a href="#download">İndir</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">Tefal tava çiziklerinden esinlenerek tasarlanmıştır. 2026</span>
+      <span class="footer-tech">77 glif &middot; UPM 1000 &middot; TTF + WOFF2</span>
+    </div>
+  </div>
 </footer>
 
 <script>
-  // Type tester
+  // ---- Header scroll effect ----
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // ---- Type tester ----
   const testerInput = document.getElementById('testerInput');
   const sizeRange = document.getElementById('sizeRange');
   const sizeVal = document.getElementById('sizeVal');
@@ -724,36 +1287,48 @@
     sizeVal.textContent = s + 'px';
   });
 
-  // Glyph grid
-  const chars = 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZabcçdefgğhıijklmnoöprsştuüvyz0123456789.,;:!?\'"- ';
+  // ---- Tester dark/light toggle ----
+  function setTesterBg(mode) {
+    const card = document.getElementById('testerCard');
+    const lightBtn = document.querySelector('.toggle-light');
+    const darkBtn = document.querySelector('.toggle-dark');
+
+    if (mode === 'dark') {
+      card.classList.add('dark-mode');
+      darkBtn.classList.add('active');
+      lightBtn.classList.remove('active');
+    } else {
+      card.classList.remove('dark-mode');
+      lightBtn.classList.add('active');
+      darkBtn.classList.remove('active');
+    }
+  }
+
+  // ---- Glyph grid ----
+  const allChars = 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZabcçdefgğhıijklmnoöprsştuüvyz0123456789.,;:!?\'"- ';
   const grid = document.getElementById('glyphGrid');
 
-  chars.split('').forEach(c => {
+  allChars.split('').forEach(c => {
     if (c === ' ') return;
     const cell = document.createElement('div');
     cell.className = 'glyph-cell';
-    const code = 'U+' + c.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0');
-    cell.innerHTML = `<span class="glyph-char">${c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '"' ? '&quot;' : c}</span><span class="glyph-code">${code}</span>`;
+    const hex = c.codePointAt(0).toString(16).toUpperCase().padStart(4, '0');
+    const display = c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '"' ? '&quot;' : c;
+    cell.innerHTML = `<span class="glyph-char">${display}</span><span class="glyph-code">U+${hex}</span>`;
     grid.appendChild(cell);
   });
 
-  // Scroll reveal with IntersectionObserver
+  // ---- Scroll reveal ----
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
+        entry.target.classList.add('visible');
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
 
-  document.querySelectorAll('.specimen-row, .editorial-grid, .tester-area, .metrics').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(24px)';
-    el.style.transition = 'opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1)';
-    observer.observe(el);
-  });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 
 </body>

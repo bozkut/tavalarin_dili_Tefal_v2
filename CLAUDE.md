@@ -31,13 +31,18 @@ cd 01-image-processing
 # Generate synthetic pan images with letter-shaped scratches
 python generate_letter_scratches.py --output ./output/synthetic_improved --count 77
 
-# Build glyph library from font contour extraction (no API needed)
-python build_glyph_library.py --output output/glyph_library_complete.json
+# Build glyph library with hairline skeleton extraction (scratch-like)
+python build_glyph_library.py --thin --output output/glyph_library_complete.json
 
-# Apply organic scratch distortion to make glyphs look hand-scratched
+# Analyze real pan scratch images to extract distortion profile
+python analyze_real_scratches.py \
+    --input "../çizik tavalar-20260325T074554Z-3-001/çizik tavalar" \
+    --output output/scratch_profile.json
+
+# Apply organic scratch distortion using real scratch profile
 python distort_strokes.py --input output/glyph_library_complete.json \
                           --output output/glyph_library_scratchy.json \
-                          --seed 42 --roughness 2.5
+                          --seed 42 --profile output/scratch_profile.json
 ```
 
 Optional (requires ANTHROPIC_API_KEY):
@@ -64,13 +69,16 @@ python preview_font.py --font output/ttf/TavaBeige-Regular.ttf --output preview.
 
 ### Data Flow
 ```
-Font Rendering → build_glyph_library.py → distort_strokes.py
+Font Rendering → build_glyph_library.py (--thin skeleton) → distort_strokes.py (--profile)
     → generate_svg.py → create_font.py → export_webfont.py → TTF/WOFF2
+
+Real Pan Photos → analyze_real_scratches.py → scratch_profile.json → distort_strokes.py
 ```
 
 ### Key Data Formats
-- **`glyph_library_complete.json`** — clean contour data for all 77 characters (from build_glyph_library.py)
-- **`glyph_library_scratchy.json`** — organically distorted strokes (from distort_strokes.py)
+- **`glyph_library_complete.json`** — hairline skeleton contours for all 77 characters (from build_glyph_library.py --thin)
+- **`scratch_profile.json`** — real scratch parameters extracted from pan photos (from analyze_real_scratches.py)
+- **`glyph_library_scratchy.json`** — organically distorted strokes using real scratch profile (from distort_strokes.py)
 - Each stage reads from and writes to sibling `output/` subdirectories
 
 ### Python Scripts (Stages 0, 1, 2)
@@ -80,8 +88,9 @@ All scripts use the Click CLI framework with tqdm progress bars and colorlog log
 
 **Stage 1:**
 - `generate_letter_scratches.py` — generates synthetic pan images with hand-drawn stroke simulation (OpenCV contour extraction + Douglas-Peucker simplification + PIL rendering with jitter)
-- `build_glyph_library.py` — extracts letter contours from font rendering, normalizes to 0-1 coordinates
-- `distort_strokes.py` — applies organic scratch distortion (subdivide → smooth noise displacement → corner softening → micro-jitter)
+- `build_glyph_library.py` — extracts letter contours from font rendering, normalizes to 0-1 coordinates. `--thin` flag uses skeleton extraction for hairline scratch-like strokes
+- `analyze_real_scratches.py` — analyzes real pan scratch photos via OpenCV (Canny + Hough + FFT) to extract scratch profile (frequencies, amplitude, roughness). Optional Claude Vision filtering
+- `distort_strokes.py` — applies organic scratch distortion (subdivide → smooth noise displacement → corner softening → micro-jitter). `--profile` flag loads real scratch parameters from scratch_profile.json
 - `find_letters_ai.py` — (optional) Claude Vision API letter detection
 - `collect_glyphs.py` — aggregates AI detections into glyph library
 - `merge_glyph_libraries.py` — merges multiple glyph libraries
