@@ -181,6 +181,8 @@ def char_to_glyph_name(char: str) -> str:
         ".": "period", ",": "comma", ";": "semicolon", ":": "colon",
         "!": "exclam", "?": "question", "'": "quotesingle",
         '"': "quotedbl", "-": "hyphen",
+        "+": "plus", "<": "less", ">": "greater",
+        "→": "arrowright", "←": "arrowleft",
     }
     if char in GLYPH_NAME_MAP:
         return GLYPH_NAME_MAP[char]
