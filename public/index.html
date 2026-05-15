@@ -1287,59 +1287,195 @@
     color: rgba(255,255,255,0.25);
   }
 
-  /* ======== RESPONSIVE ======== */
+  /* ======== RESPONSIVE — Tablet ======== */
   @media (max-width: 900px) {
     .container { padding: 0 24px; }
     header .container { padding: 0 24px; }
     .header-inner { height: 60px; }
     .header-divider, .project-name { display: none; }
-    .header-nav { gap: 24px; }
+    .header-nav { gap: 20px; }
     .header-nav a { font-size: 13px; }
 
-    .hero { padding: 120px 0 80px; }
+    .hero { padding: 110px 0 72px; }
     .hero-visual { display: none; }
-    .hero-stats { gap: 32px; flex-wrap: wrap; }
+    .hero-stats { gap: 24px; flex-wrap: wrap; }
+    .hero-stat-val { font-size: 22px; }
 
+    .about { padding: 72px 0; }
     .about-grid {
       grid-template-columns: 1fr;
-      gap: 48px;
+      gap: 40px;
     }
-    .about-display { min-height: 280px; }
+    .about-display { min-height: 260px; }
 
     .specimen-header { flex-direction: column; align-items: flex-start; gap: 8px; }
 
-    .tester-toolbar { padding: 16px 24px; flex-wrap: wrap; }
-    .tester-input { padding: 28px 24px; }
+    .tester-toolbar { padding: 14px 20px; flex-wrap: wrap; gap: 12px; }
+    .tester-input { padding: 24px 20px; font-size: clamp(28px, 6vw, 48px); }
     .bg-toggle { margin-left: 0; }
 
-    .glyph-grid { grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); }
-    .glyph-char { font-size: 22px; }
+    .glyph-grid { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 4px; }
+    .glyph-char { font-size: 20px; }
+    .glyph-code { font-size: 7px; }
 
     .proof-panel {
       grid-template-columns: 1fr;
-      gap: 24px;
+      gap: 20px;
+      padding: 24px;
     }
 
-    .photo-grid { grid-template-columns: repeat(3, 1fr); }
+    .photo-grid { grid-template-columns: repeat(3, 1fr); gap: 4px; }
+    .proof-metrics { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .proof-table { font-size: 12px; }
 
-    .proof-metrics { grid-template-columns: repeat(3, 1fr); }
+    .download { padding: 72px 0; }
+    .download-sub { font-size: 16px; margin-bottom: 32px; }
 
     .footer-top { flex-direction: column; gap: 24px; }
     .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
   }
 
+  /* ======== RESPONSIVE — Mobile ======== */
   @media (max-width: 560px) {
+    .container { padding: 0 16px; }
+    header .container { padding: 0 16px; }
+    .header-inner { height: 56px; }
     .header-nav { display: none; }
-    .hero-title { letter-spacing: 1px; }
-    .photo-grid { grid-template-columns: repeat(2, 1fr); }
-    .svg-compare { grid-template-columns: 1fr; gap: 8px; }
-    .svg-arrow { transform: rotate(90deg); text-align: center; }
-    .proof-metrics { grid-template-columns: repeat(3, 1fr); }
-    .pipeline-flow { flex-wrap: wrap; justify-content: center; }
-    .data-bar-row { grid-template-columns: 80px 1fr 50px; }
-    .specimen-chars { letter-spacing: 4px; }
-    .marquee-text { letter-spacing: 8px; }
-    .footer-links { flex-wrap: wrap; gap: 16px; }
+    .tefal-logo { height: 22px; }
+
+    /* Hero */
+    .hero { padding: 88px 0 56px; }
+    .hero-badge { padding: 6px 12px; margin-bottom: 20px; }
+    .hero-badge-text { font-size: 11px; }
+    .hero-title { letter-spacing: 1px; margin-bottom: 20px; }
+    .hero-subtitle { font-size: 15px; line-height: 1.6; margin-bottom: 28px; }
+    .hero-actions { gap: 8px; }
+    .hero-actions .btn { padding: 12px 20px; font-size: 13px; flex: 1; justify-content: center; min-width: 0; }
+    .hero-stats { gap: 16px; margin-top: 40px; padding-top: 28px; }
+    .hero-stat { flex: 1; min-width: 0; }
+    .hero-stat-val { font-size: 18px; }
+    .hero-stat-label { font-size: 11px; }
+
+    /* About */
+    .about { padding: 56px 0; }
+    .about-eyebrow { font-size: 11px; margin-bottom: 14px; }
+    .about-title { font-size: 24px; margin-bottom: 16px; }
+    .about-text { font-size: 14px; }
+    .about-display { min-height: 220px; border-radius: 12px; padding: 32px 16px; }
+    .about-display-text { font-size: clamp(32px, 10vw, 56px); letter-spacing: 3px; }
+
+    /* Marquee */
+    .marquee-section { padding: 24px 0; }
+    .marquee-text { font-size: clamp(28px, 8vw, 48px); letter-spacing: 6px; }
+
+    /* Specimen */
+    .specimen { padding: 56px 0; }
+    .specimen .container { padding: 0 16px; }
+    .specimen-title { font-size: 22px; }
+    .specimen-count { font-size: 12px; }
+    .specimen-label { font-size: 11px; padding: 6px 12px; }
+    .specimen-chars { font-size: clamp(22px, 6vw, 36px); letter-spacing: 3px; line-height: 1.5; word-break: break-all; }
+    .specimen-chars.nums { font-size: clamp(24px, 7vw, 40px); letter-spacing: 4px; }
+    .specimen-chars.punct { font-size: clamp(20px, 5vw, 32px); letter-spacing: 6px; }
+    .specimen-block { margin-bottom: 4px; }
+
+    /* Type tester */
+    .tester .container > .reveal:first-child { font-size: 11px; }
+    .tester .container > h2 { font-size: 22px; }
+    .tester-card { border-radius: 12px; }
+    .tester-input { padding: 20px 16px; font-size: clamp(24px, 7vw, 40px); min-height: 120px; }
+    .tester-toolbar { padding: 12px 16px; gap: 10px; }
+    .tester-toolbar label { font-size: 12px; }
+    .size-display { font-size: 11px; min-width: 36px; }
+    .range-slider { max-width: 120px; }
+
+    /* Glyph grid */
+    .glyphmap { padding: 56px 0; }
+    .glyph-grid { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); gap: 3px; }
+    .glyph-cell { padding: 8px 2px 6px; border-radius: 6px; }
+    .glyph-char { font-size: 18px; }
+    .glyph-code { font-size: 6px; letter-spacing: 0; }
+
+    /* Metrics row */
+    .metrics-row { gap: 3px; }
+    .metric-card { padding: 16px 8px; border-radius: 8px; }
+    .metric-val { font-size: 16px; }
+    .metric-label { font-size: 9px; }
+
+    /* Process / Proof */
+    .process { padding: 56px 0; }
+    .process-eyebrow { font-size: 11px; }
+    .process-title { font-size: 22px; margin-bottom: 32px; }
+    .proof-panel { padding: 16px; border-radius: 12px; margin-bottom: 24px; gap: 16px; }
+    .proof-num { font-size: 10px; margin-bottom: 8px; }
+    .proof-info h3 { font-size: 17px; margin-bottom: 8px; }
+    .proof-info p { font-size: 13px; line-height: 1.6; margin-bottom: 12px; }
+    .proof-badge { font-size: 9px; padding: 5px 8px; }
+    .proof-table { font-size: 11px; }
+    .proof-table td, .proof-table th { padding: 6px 8px; }
+
+    .photo-grid { grid-template-columns: repeat(2, 1fr); gap: 3px; }
+    .photo-grid img { border-radius: 6px; }
+
+    .svg-compare { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .svg-arrow { display: none; }
+    .svg-box { padding: 12px 8px; border-radius: 8px; }
+    .svg-box-label { font-size: 9px; padding: 2px 6px; border-radius: 3px; }
+
+    .data-bar-row { grid-template-columns: 64px 1fr 40px; gap: 6px; }
+    .data-bar-label { font-size: 9px; }
+    .data-bar-val { font-size: 10px; }
+
+    .freq-chart { padding: 10px 12px; height: 64px; gap: 8px; border-radius: 8px; }
+    .freq-bar-label { font-size: 8px; }
+
+    .pipeline-flow { flex-wrap: wrap; justify-content: center; gap: 6px; }
+    .pipeline-step { padding: 10px 8px; border-radius: 8px; min-width: 0; flex: 1 1 calc(33% - 8px); }
+    .pipeline-icon { font-size: 18px; }
+    .pipeline-label { font-size: 9px; }
+    .pipeline-arrow { font-size: 14px; display: none; }
+
+    .proof-metrics { grid-template-columns: repeat(3, 1fr); gap: 4px; }
+    .proof-metric { padding: 12px 6px; border-radius: 8px; }
+    .proof-metric-val { font-size: 14px; }
+    .proof-metric-label { font-size: 8px; }
+
+    .proof-specimen { padding: 24px 12px; border-radius: 12px; }
+    .proof-specimen-text { font-size: clamp(28px, 8vw, 48px); }
+
+    /* Download */
+    .download { padding: 56px 0; }
+    .download-title { letter-spacing: 2px; }
+    .download-sub { font-size: 14px; margin-bottom: 28px; }
+    .download-btns { gap: 8px; flex-direction: column; align-items: center; }
+    .download-btns .btn { width: 100%; max-width: 280px; justify-content: center; padding: 14px 24px; }
+
+    /* Footer */
+    footer { padding: 40px 0 28px; }
+    .footer-top { gap: 20px; }
+    .footer-brand-text { font-size: 12px; }
+    .footer-links { flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .footer-links a { font-size: 12px; }
+    .footer-bottom { padding-top: 20px; margin-top: 24px; }
+    .footer-copy { font-size: 11px; }
+    .footer-tech { font-size: 10px; }
+  }
+
+  /* ======== RESPONSIVE — Small phones ======== */
+  @media (max-width: 380px) {
+    .container { padding: 0 12px; }
+    .hero { padding: 80px 0 48px; }
+    .hero-title { line-height: 0.88; }
+    .hero-stats { flex-direction: column; gap: 12px; }
+    .hero-stat { display: flex; justify-content: space-between; align-items: baseline; width: 100%; }
+    .specimen-chars { font-size: 20px; letter-spacing: 2px; }
+    .specimen-chars.punct { font-size: 18px; letter-spacing: 4px; }
+    .glyph-grid { grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); }
+    .glyph-char { font-size: 16px; }
+    .svg-compare { grid-template-columns: 1fr 1fr; }
+    .proof-panel { padding: 12px; }
+    .tester-input { font-size: 22px; }
+    .pipeline-step { flex: 1 1 calc(50% - 8px); }
   }
 </style>
 </head>
