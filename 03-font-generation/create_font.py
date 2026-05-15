@@ -183,6 +183,13 @@ def char_to_glyph_name(char: str) -> str:
         '"': "quotedbl", "-": "hyphen",
         "+": "plus", "<": "less", ">": "greater",
         "→": "arrowright", "←": "arrowleft", "−": "minus",
+        "~": "asciitilde", "`": "grave", "|": "bar",
+        "^": "asciicircum", "=": "equal", "\\": "backslash", "%": "percent",
+        "•": "bullet", "√": "radical", "π": "pi", "÷": "divide",
+        "×": "multiply", "§": "section", "Δ": "Delta", "°": "degree",
+        "©": "copyright", "®": "registered", "™": "trademark", "✓": "checkmark",
+        "£": "sterling", "€": "Euro", "$": "dollar", "¢": "cent",
+        "{": "braceleft", "}": "braceright", "[": "bracketleft", "]": "bracketright",
     }
     if char in GLYPH_NAME_MAP:
         return GLYPH_NAME_MAP[char]

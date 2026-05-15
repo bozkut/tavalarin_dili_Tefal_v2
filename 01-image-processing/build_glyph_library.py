@@ -36,6 +36,10 @@ TURKISH_CHARS = {
     "digits": list("0123456789"),
     "punctuation": list(".,;:!?'\"-+<>"),
     "arrows": ["→", "←", "−"],
+    "math": list("~`|^=\\%"),
+    "symbols": ["•", "√", "π", "÷", "×", "§", "Δ", "°", "©", "®", "™", "✓"],
+    "currency": list("£€$¢"),
+    "brackets": list("{}[]"),
 }
 
 
