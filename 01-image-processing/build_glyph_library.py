@@ -35,7 +35,7 @@ TURKISH_CHARS = {
     "lowercase": list("abcçdefgğhıijklmnoöprsştuüvyz"),
     "digits": list("0123456789"),
     "punctuation": list(".,;:!?'\"-+<>"),
-    "arrows": ["→", "←"],
+    "arrows": ["→", "←", "−"],
 }
 
 

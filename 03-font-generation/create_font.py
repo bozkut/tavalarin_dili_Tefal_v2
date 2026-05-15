@@ -182,7 +182,7 @@ def char_to_glyph_name(char: str) -> str:
         "!": "exclam", "?": "question", "'": "quotesingle",
         '"': "quotedbl", "-": "hyphen",
         "+": "plus", "<": "less", ">": "greater",
-        "→": "arrowright", "←": "arrowleft",
+        "→": "arrowright", "←": "arrowleft", "−": "minus",
     }
     if char in GLYPH_NAME_MAP:
         return GLYPH_NAME_MAP[char]
